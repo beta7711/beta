@@ -7,361 +7,364 @@
 <style>
   :root {
     --text: #1d1d1f;
-    --text-secondary: #6e6e73;
+    --text-secondary: #86868b;
     --text-tertiary: #aeaeb2;
-    --bg: #f5f5f7;
-    --white: #ffffff;
-    --nav-bg: rgba(255,255,255,0.72);
-    --card-bg: #ffffff;
-    --card-shadow: 0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.06);
-    --card-shadow-hover: 0 4px 16px rgba(0,0,0,0.08), 0 2px 6px rgba(0,0,0,0.04);
+    --bg: #ffffff;
+    --section-bg: #f5f5f7;
+    --nav-bg: rgba(29,29,31,0.92);
+    --nav-text: rgba(255,255,255,0.8);
     --blue: #0071e3;
-    --blue-light: #2997ff;
-    --purple: #ac39ff;
-    --radius-sm: 12px;
-    --radius: 18px;
-    --radius-lg: 24px;
-    --transition: 0.35s cubic-bezier(0.25, 0.1, 0.25, 1);
+    --blue-hover: #0077ed;
+    --card-bg: #ffffff;
+    --card-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    --card-hover-shadow: 0 8px 24px rgba(0,0,0,0.1);
+    --border: rgba(0,0,0,0.06);
+    --radius-sm: 10px;
+    --radius: 16px;
+    --radius-lg: 22px;
+    --transition: 0.32s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
   body {
-    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "PingFang SC", "Microsoft YaHei", sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", "PingFang SC", sans-serif;
     background: var(--bg);
     color: var(--text);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    line-height: 1.47;
-    letter-spacing: -0.01em;
   }
 
-  /* ─── Navigation ─── */
-  nav {
+  /* ═══ Navigation (Apple-style dark bar) ═══ */
+  .nav {
     position: fixed; top: 0; width: 100%; z-index: 100;
-    padding: 0 40px;
-    height: 48px;
-    display: flex; justify-content: space-between; align-items: center;
+    height: 44px;
     background: var(--nav-bg);
     backdrop-filter: saturate(180%) blur(20px);
     -webkit-backdrop-filter: saturate(180%) blur(20px);
-    border-bottom: 0.5px solid rgba(0,0,0,0.08);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .nav-inner {
+    display: flex; align-items: center; justify-content: space-between;
+    max-width: 1024px; width: 100%; padding: 0 22px;
   }
   .nav-logo {
-    font-size: 17px; font-weight: 600;
-    letter-spacing: -0.3px; color: var(--text);
+    font-size: 17px; font-weight: 600; color: #fff;
+    letter-spacing: -0.3px; text-decoration: none;
     display: flex; align-items: center; gap: 6px;
   }
-  .nav-dot {
-    width: 7px; height: 7px; border-radius: 50%;
+  .nav-logo-dot {
+    width: 6px; height: 6px; border-radius: 50%;
     background: var(--blue);
   }
-  .nav-right { display: flex; align-items: center; gap: 12px; }
-  .nav-search {
+  .nav-search-wrap {
     display: flex; align-items: center; gap: 8px;
-    background: rgba(0,0,0,0.04);
-    border: 0.5px solid rgba(0,0,0,0.08);
-    border-radius: 50px; padding: 0 16px; width: 260px;
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 50px; padding: 5px 14px; width: 240px;
     transition: all var(--transition);
   }
-  .nav-search:focus-within {
-    background: var(--white);
-    border-color: var(--blue);
-    box-shadow: 0 0 0 3px rgba(0,113,227,0.12);
+  .nav-search-wrap:focus-within {
+    background: rgba(255,255,255,0.18);
+    border-color: rgba(255,255,255,0.3);
+    box-shadow: 0 0 0 3px rgba(0,113,227,0.25);
   }
-  .nav-search svg { color: var(--text-tertiary); flex-shrink: 0; }
-  .nav-search input {
+  .nav-search-wrap svg { color: rgba(255,255,255,0.5); flex-shrink: 0; }
+  .nav-search-wrap input {
     flex: 1; background: none; border: none;
-    color: var(--text); font-size: 13px; padding: 9px 0;
-    outline: none; font-family: inherit;
+    color: #fff; font-size: 13px; padding: 4px 0;
+    outline: none; font-family: inherit; caret-color: var(--blue);
   }
-  .nav-search input::placeholder { color: var(--text-tertiary); }
-  .nav-count { font-size: 12px; color: var(--text-secondary); white-space: nowrap; }
-  .nav-count strong { color: var(--text); font-weight: 600; }
+  .nav-search-wrap input::placeholder { color: rgba(255,255,255,0.45); }
+  .nav-count { font-size: 12px; color: rgba(255,255,255,0.5); white-space: nowrap; }
 
-  /* ─── Category pills ─── */
-  .cat-nav {
-    position: sticky; top: 48px; z-index: 50;
-    padding: 12px 0;
-    background: rgba(245,245,247,0.72);
+  /* ═══ Category bar (Apple-style thin tabs) ═══ */
+  .cat-bar {
+    position: sticky; top: 44px; z-index: 50;
+    height: 52px;
+    background: rgba(255,255,255,0.85);
     backdrop-filter: saturate(180%) blur(20px);
     -webkit-backdrop-filter: saturate(180%) blur(20px);
-    border-bottom: 0.5px solid rgba(0,0,0,0.06);
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
   }
-  .cat-nav-inner {
-    display: flex; gap: 4px; padding: 0 40px;
-    overflow-x: auto; scroll-behavior: smooth;
+  .cat-bar-inner {
+    display: flex; align-items: center; gap: 0;
+    max-width: 1024px; width: 100%;
+    padding: 0 22px;
+    overflow-x: auto;
     -webkit-overflow-scrolling: touch;
   }
-  .cat-nav-inner::-webkit-scrollbar { height: 0; }
-  .cat-pill {
-    padding: 7px 15px; border-radius: 50px;
-    font-size: 12px; font-weight: 500; letter-spacing: -0.1px;
-    white-space: nowrap; cursor: pointer; user-select: none;
-    transition: all var(--transition);
-    background: transparent;
+  .cat-bar-inner::-webkit-scrollbar { height: 0; }
+
+  .cat-tab {
+    position: relative;
+    padding: 14px 16px;
+    font-size: 12px; font-weight: 400;
     color: var(--text-secondary);
-    flex-shrink: 0;
+    white-space: nowrap; cursor: pointer;
+    transition: color var(--transition);
+    letter-spacing: -0.08px;
+    display: flex; align-items: center; gap: 4px;
+    background: none; border: none; font-family: inherit;
   }
-  .cat-pill:hover { color: var(--text); background: rgba(0,0,0,0.04); }
-  .cat-pill.active {
-    color: var(--text); font-weight: 600;
-    background: rgba(0,0,0,0.06);
+  .cat-tab::after {
+    content: '';
+    position: absolute; bottom: 8px; left: 16px; right: 16px;
+    height: 1.5px;
+    background: var(--text);
+    transform: scaleX(0);
+    transition: transform var(--transition);
   }
-  .cat-pill .pill-count { font-size: 10px; opacity: 0.45; margin-left: 2px; }
-  .cat-pill.active .pill-count { opacity: 0.7; }
+  .cat-tab:hover { color: var(--text); }
+  .cat-tab.active { color: var(--text); font-weight: 500; }
+  .cat-tab.active::after { transform: scaleX(1); }
+  .cat-tab .tab-num {
+    font-size: 10px; color: var(--text-tertiary);
+    font-weight: 400;
+  }
+  .cat-tab.active .tab-num { color: var(--text-secondary); }
 
-  /* ─── Content ─── */
+  /* ═══ Main content ═══ */
   .main-content {
-    max-width: 1100px; margin: 0 auto;
-    padding: 60px 40px 100px;
+    max-width: 980px; margin: 0 auto;
+    padding: 0 22px 100px;
   }
 
-  /* ─── Hero ─── */
+  /* ═══ Hero ═══ */
   .hero {
-    text-align: center; padding: 40px 0 48px;
-    animation: fadeUp 0.9s cubic-bezier(0.25,0.1,0.25,1) forwards;
+    text-align: center; padding: 80px 0 72px;
+    animation: fadeUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
   }
-  @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
-  .hero .badge {
-    display: inline-flex; align-items: center; gap: 6px;
-    font-size: 13px; font-weight: 500; color: var(--blue);
-    margin-bottom: 16px;
-    letter-spacing: -0.2px;
-  }
-  .hero .badge::before {
-    content: ''; width: 5px; height: 5px;
-    border-radius: 50%; background: var(--blue);
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+  .hero .label {
+    display: inline-block;
+    font-size: 14px; font-weight: 500; color: var(--blue);
+    margin-bottom: 18px;
+    letter-spacing: 0;
   }
   .hero h1 {
-    font-size: clamp(40px, 7vw, 72px); font-weight: 700;
-    letter-spacing: -1.5px; line-height: 1.05;
-    margin-bottom: 14px;
+    font-size: clamp(44px, 8vw, 80px); font-weight: 700;
+    letter-spacing: -2px; line-height: 1.06;
+    margin-bottom: 16px;
   }
-  .hero h1 .hl {
-    background: linear-gradient(135deg, var(--blue) 0%, #5e5ce6 40%, var(--purple) 100%);
+  .hero h1 em {
+    font-style: normal;
+    background: linear-gradient(180deg, #0071e3 0%, #5e5ce6 50%, #ac39ff 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
   }
-  .hero p {
-    font-size: 19px; color: var(--text-secondary);
-    max-width: 500px; margin: 0 auto;
-    font-weight: 400; letter-spacing: -0.2px;
-    line-height: 1.4;
+  .hero .sub {
+    font-size: 21px; color: var(--text-secondary);
+    font-weight: 400; letter-spacing: -0.3px;
+    line-height: 1.4; max-width: 520px; margin: 0 auto;
   }
-  .hero-stats {
-    display: flex; justify-content: center; gap: 48px;
-    margin-top: 36px;
+  .hero-nums {
+    display: flex; justify-content: center; gap: 60px;
+    margin-top: 44px;
   }
-  .hero-stat { text-align: center; }
-  .hero-stat .val {
-    font-size: 36px; font-weight: 700;
-    letter-spacing: -0.5px;
-    background: linear-gradient(135deg, var(--blue), #5e5ce6);
+  .hero-num { text-align: center; }
+  .hero-num .n {
+    font-size: 44px; font-weight: 700;
+    letter-spacing: -1px;
+    background: linear-gradient(180deg, var(--blue), #5e5ce6);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+    line-height: 1.1;
   }
-  .hero-stat .lbl { font-size: 12px; color: var(--text-secondary); margin-top: 2px; }
+  .hero-num .l {
+    font-size: 12px; color: var(--text-secondary);
+    font-weight: 400; margin-top: 4px;
+  }
 
-  /* ─── AI Column ─── */
-  .ai-column { margin-bottom: 64px; }
-
-  .ai-banner {
-    display: flex; align-items: center; gap: 14px;
-    margin-bottom: 24px;
+  /* ═══ AI Column ═══ */
+  .sec-head {
+    text-align: center; margin-bottom: 40px;
   }
-  .ai-banner-icon {
-    font-size: 28px; flex-shrink: 0;
-  }
-  .ai-banner-text h3 { font-size: 24px; font-weight: 700; letter-spacing: -0.5px; margin-bottom: 2px; }
-  .ai-banner-text p { font-size: 15px; color: var(--text-secondary); }
+  .sec-head .sec-icon { font-size: 36px; margin-bottom: 8px; }
+  .sec-head h2 { font-size: 32px; font-weight: 700; letter-spacing: -0.6px; margin-bottom: 6px; }
+  .sec-head p { font-size: 17px; color: var(--text-secondary); letter-spacing: -0.2px; }
 
   .ai-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 16px;
+    margin-bottom: 80px;
   }
-
   .ai-card {
     background: var(--card-bg);
+    border: 1px solid var(--border);
     border-radius: var(--radius);
-    padding: 22px 24px;
+    padding: 24px;
     box-shadow: var(--card-shadow);
     transition: all var(--transition);
-    opacity: 0; transform: translateY(16px);
-    border: 0.5px solid rgba(0,0,0,0.04);
+    opacity: 0; transform: translateY(20px);
   }
   .ai-card.visible { opacity: 1; transform: translateY(0); }
   .ai-card:hover {
-    box-shadow: var(--card-shadow-hover);
-    transform: translateY(-3px);
+    box-shadow: var(--card-hover-shadow);
+    transform: translateY(-4px);
+    border-color: rgba(0,0,0,0.12);
   }
-  .ai-card-header { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
-  .ai-card-icon { font-size: 22px; }
-  .ai-card-header h4 { font-size: 15px; font-weight: 600; letter-spacing: -0.2px; }
-  .ai-card-items { display: flex; flex-wrap: wrap; gap: 6px; }
+  .ai-card-head { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+  .ai-card-icon { font-size: 24px; }
+  .ai-card-head h4 { font-size: 15px; font-weight: 600; letter-spacing: -0.2px; }
+  .ai-tags { display: flex; flex-wrap: wrap; gap: 6px; }
   .ai-tag {
-    font-size: 11px; color: var(--text-secondary);
-    background: rgba(0,0,0,0.03);
-    padding: 5px 11px; border-radius: 6px;
+    display: inline-block;
+    font-size: 12px; color: var(--text-secondary);
+    background: #f5f5f7; border-radius: 6px;
+    padding: 5px 10px; text-decoration: none;
     transition: all var(--transition);
-    text-decoration: none;
   }
-  .ai-tag:hover {
-    color: var(--white); background: var(--blue);
-  }
+  .ai-tag:hover { background: var(--blue); color: #fff; }
 
-  /* ─── Category Section ─── */
+  /* ═══ Category Section ═══ */
   .cat-section {
-    margin-bottom: 72px;
+    margin-bottom: 80px;
     scroll-margin-top: 110px;
     opacity: 0; transform: translateY(30px);
-    transition: all 0.6s cubic-bezier(0.25,0.1,0.25,1);
+    transition: all 0.55s cubic-bezier(0.4, 0, 0.2, 1);
   }
   .cat-section.visible { opacity: 1; transform: translateY(0); }
 
-  .cat-header {
+  .cat-sec-head {
     text-align: center; margin-bottom: 32px;
   }
-  .cat-header-icon {
-    font-size: 32px; margin-bottom: 10px;
-  }
-  .cat-header h3 { font-size: 28px; font-weight: 700; letter-spacing: -0.5px; }
-  .cat-header p { font-size: 15px; color: var(--text-secondary); margin-top: 4px; }
+  .cat-sec-icon { font-size: 36px; margin-bottom: 8px; }
+  .cat-sec-head h3 { font-size: 28px; font-weight: 700; letter-spacing: -0.5px; }
+  .cat-sec-head p { font-size: 15px; color: var(--text-secondary); margin-top: 4px; max-width: 480px; margin-left: auto; margin-right: auto; }
 
-  /* ─── Bookmark Grid ─── */
+  /* ═══ Bookmark grid ═══ */
   .bookmark-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
     gap: 12px;
   }
-
   .bookmark-card {
     background: var(--card-bg);
-    border: 0.5px solid rgba(0,0,0,0.04);
+    border: 1px solid var(--border);
     border-radius: var(--radius);
     padding: 16px 18px;
-    cursor: pointer;
-    transition: all var(--transition);
-    display: flex; align-items: flex-start; gap: 14px;
-    text-decoration: none; color: inherit;
+    cursor: pointer; text-decoration: none; color: inherit;
+    display: flex; align-items: flex-start; gap: 12px;
     box-shadow: var(--card-shadow);
+    transition: all var(--transition);
     opacity: 0; transform: translateY(16px);
   }
   .bookmark-card.visible { opacity: 1; transform: translateY(0); }
   .bookmark-card:hover {
-    box-shadow: var(--card-shadow-hover);
+    box-shadow: var(--card-hover-shadow);
     transform: translateY(-3px);
+    border-color: rgba(0,0,0,0.15);
   }
-
   .card-favicon {
-    width: 42px; height: 42px; border-radius: 10px;
+    width: 40px; height: 40px; border-radius: 8px;
     flex-shrink: 0;
     display: flex; align-items: center; justify-content: center;
-    background: #f5f5f7;
-    overflow: hidden; position: relative;
+    background: #f5f5f7; overflow: hidden; position: relative;
   }
-  .card-favicon img { width: 24px; height: 24px; position: relative; z-index: 1; border-radius: 4px; }
-  .card-favicon .fallback {
+  .card-favicon img { width: 22px; height: 22px; position: relative; z-index: 1; }
+  .card-favicon .fb {
     position: absolute; inset: 0;
     display: flex; align-items: center; justify-content: center;
     font-size: 16px; font-weight: 700; z-index: 0;
   }
-
   .card-body { flex: 1; min-width: 0; }
   .card-title {
-    font-size: 14px; font-weight: 600; letter-spacing: -0.1px;
-    line-height: 1.3; color: var(--text);
-    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    font-size: 13px; font-weight: 600; letter-spacing: -0.1px;
+    line-height: 1.3; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
     margin-bottom: 2px;
   }
   .card-desc {
-    font-size: 12px; color: var(--text-secondary); line-height: 1.35;
+    font-size: 12px; color: var(--text-secondary); line-height: 1.3;
     overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-    margin-bottom: 5px;
+    margin-bottom: 4px;
   }
-  .card-domain {
+  .card-url {
     font-size: 11px; color: var(--text-tertiary);
     overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
   }
-  .card-arrow {
+  .card-arr {
     opacity: 0; transition: all var(--transition);
     flex-shrink: 0; margin-top: 2px;
     color: var(--text-tertiary);
   }
-  .bookmark-card:hover .card-arrow { opacity: 1; color: var(--blue); }
+  .bookmark-card:hover .card-arr { opacity: 1; color: var(--blue); }
 
-  /* ─── View more ─── */
-  .view-more { text-align: center; margin-top: 20px; }
-  .view-more-btn {
+  /* ═══ View more ═══ */
+  .more-wrap { text-align: center; margin-top: 20px; }
+  .more-btn {
     display: inline-flex; align-items: center; gap: 4px;
-    padding: 10px 24px; border-radius: 50px;
-    font-size: 13px; font-weight: 500; color: var(--blue);
-    cursor: pointer; background: rgba(0,113,227,0.06);
-    border: none; transition: all var(--transition);
+    font-size: 14px; color: var(--blue); cursor: pointer;
+    text-decoration: none;
+    transition: all var(--transition);
   }
-  .view-more-btn:hover { background: rgba(0,113,227,0.12); }
+  .more-btn:hover { text-decoration: underline; }
 
-  /* ─── Search result ─── */
-  .search-header {
-    text-align: center; padding: 20px 0 32px;
+  /* ═══ Search ═══ */
+  .search-head {
+    text-align: center; padding: 30px 0 36px;
   }
-  .search-header h2 { font-size: 24px; font-weight: 700; letter-spacing: -0.5px; margin-bottom: 4px; }
-  .search-header .qh { color: var(--blue); }
-  .search-header p { color: var(--text-secondary); font-size: 14px; }
+  .search-head h2 { font-size: 28px; font-weight: 700; letter-spacing: -0.5px; margin-bottom: 4px; }
+  .search-head .q { color: var(--blue); }
+  .search-head p { color: var(--text-secondary); font-size: 15px; }
 
-  /* ─── Empty ─── */
+  /* ═══ Empty ═══ */
   .empty-state { text-align: center; padding: 100px 20px; color: var(--text-secondary); }
-  .empty-state .empty-icon { font-size: 56px; margin-bottom: 20px; opacity: 0.25; }
-  .empty-state h3 { font-size: 18px; color: var(--text); margin-bottom: 6px; }
+  .empty-state .ei { font-size: 56px; margin-bottom: 20px; opacity: 0.2; }
+  .empty-state h3 { font-size: 18px; color: var(--text); margin-bottom: 4px; }
 
-  /* ─── Footer ─── */
+  /* ═══ Footer ═══ */
   footer {
-    text-align: center; padding: 24px 20px;
+    text-align: center; padding: 26px 20px;
     color: var(--text-tertiary); font-size: 11px;
-    border-top: 0.5px solid rgba(0,0,0,0.06);
-    letter-spacing: 0;
+    border-top: 1px solid var(--border);
   }
 
-  /* ─── Mobile ─── */
+  /* ═══ Responsive ═══ */
   @media (max-width: 768px) {
-    nav { padding: 0 16px; height: 44px; }
+    .nav-inner { padding: 0 16px; }
     .nav-logo { font-size: 15px; }
-    .nav-search { width: 160px; padding: 0 12px; }
+    .nav-search-wrap { width: 150px; padding: 4px 10px; }
     .nav-count { display: none; }
-    .cat-nav-inner { padding: 0 16px; }
-    .main-content { padding: 40px 16px 80px; }
-    .hero { padding: 24px 0 32px; }
-    .hero h1 { font-size: 32px; }
-    .hero p { font-size: 16px; }
-    .hero-stats { gap: 28px; }
-    .hero-stat .val { font-size: 26px; }
+    .cat-bar-inner { padding: 0 16px; }
+    .cat-tab { padding: 14px 10px; font-size: 11px; }
+    .cat-tab::after { left: 10px; right: 10px; }
+    .main-content { padding: 0 16px 80px; }
+    .hero { padding: 60px 0 48px; }
+    .hero h1 { font-size: 32px; letter-spacing: -1px; }
+    .hero .sub { font-size: 17px; }
+    .hero-nums { gap: 32px; }
+    .hero-num .n { font-size: 30px; }
     .ai-grid { grid-template-columns: 1fr; }
     .bookmark-grid { grid-template-columns: 1fr; }
-    .cat-header h3 { font-size: 22px; }
+    .sec-head h2 { font-size: 24px; }
+    .cat-sec-head h3 { font-size: 22px; }
   }
 </style>
 </head>
 <body>
 
-<nav>
-  <div class="nav-logo"><span class="nav-dot"></span>贝塔导航</div>
-  <div class="nav-right">
-    <div class="nav-search">
+<header class="nav">
+  <div class="nav-inner">
+    <div class="nav-logo"><span class="nav-logo-dot"></span>贝塔导航</div>
+    <div class="nav-search-wrap">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
       <input type="text" id="searchInput" placeholder="搜索" autocomplete="off">
     </div>
-    <span class="nav-count" id="navInfo"><strong>407</strong> 个书签</span>
+    <span class="nav-count" id="navInfo">407 个书签</span>
   </div>
-</nav>
+</header>
 
-<div class="cat-nav" id="catNav">
-  <div class="cat-nav-inner" id="catNavInner"></div>
+<div class="cat-bar" id="catBar">
+  <div class="cat-bar-inner" id="catBarInner"></div>
 </div>
 
 <main class="main-content" id="mainContent"></main>
 
-<footer>贝塔导航 · 精心整理的互联网记忆</footer>
+<footer>Copyright © 2026 贝塔导航。保留所有权利。</footer>
 
 <script>
 var BOOKMARK_DATA = [
@@ -2465,148 +2468,122 @@ var BOOKMARK_DATA = [
     '数据与营销推广': '📊', '学习与教程': '📚',
     '游戏与娱乐': '🎮',
   };
-  var ICON_BG = {
-    'AI平台与对话': '#e8f0fe', 'AI图像与设计': '#fce8e6',
-    '视频与音频工具': '#e8f5e9', '文案与内容创作': '#e0f2f1',
-    '设计素材与资源': '#fff8e1', '效率与系统工具': '#f3e5f5',
-    '数据与营销推广': '#ede7f6', '学习与教程': '#e3f2fd',
-    '游戏与娱乐': '#fce4ec',
-  };
   var LETTER_COLORS = ['#0071e3','#ac39ff','#ff2d55','#34c759','#ff9500','#ff9f0a','#5e5ce6','#0088cc'];
 
-  function catIcon(n) { return ICONS[n] || '🔗'; }
-  function catBg(n) { return ICON_BG[n] || '#f5f5f7'; }
-
-  // ─── Data ───
   var flatItems = [], categories = [];
   for (var i = 0; i < BOOKMARK_DATA.length; i++) {
-    var cat = BOOKMARK_DATA[i];
-    categories.push(cat);
-    for (var j = 0; j < cat.children.length; j++) {
-      flatItems.push({ category: cat.name, item: cat.children[j] });
-    }
+    var c = BOOKMARK_DATA[i]; categories.push(c);
+    for (var j = 0; j < c.children.length; j++) flatItems.push({ cat: c.name, it: c.children[j] });
   }
   var activeCategory = null;
 
   function esc(s) {
     return String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/'/g,'&#39;');
   }
-  function domain(u) {
-    try { return new URL(u).hostname.replace(/^www\./, ''); } catch(e) { return u; }
-  }
-  function favUrl(u) {
-    try { return 'https://www.google.com/s2/favicons?domain=' + new URL(u).hostname + '&sz=64'; } catch(e) { return ''; }
-  }
-  function firstCh(s) {
+  function dm(u) { try { return new URL(u).hostname.replace(/^www\./, ''); } catch(e) { return u; } }
+  function fv(u) { try { return 'https://www.google.com/s2/favicons?domain=' + new URL(u).hostname + '&sz=64'; } catch(e) { return ''; } }
+  function fc(s) {
     var m = s.trim().match(/[一-鿿]/); if (m) return m[0];
     m = s.trim().match(/[a-zA-Z]/); if (m) return m[0].toUpperCase();
     return s.trim().charAt(0).toUpperCase();
   }
 
-  function cardHTML(item, idx) {
-    var d = domain(item.href), desc = item.desc || '', letter = firstCh(item.name);
-    var lc = LETTER_COLORS[(item.name.charCodeAt(0)||0) % LETTER_COLORS.length];
-    return '<a class="bookmark-card" style="transition-delay:' + (idx%20)*0.03 + 's" href="' + esc(item.href) + '" target="_blank" rel="noopener">'
-      + '<div class="card-favicon">'
-      + '<img src="' + favUrl(item.href) + '" alt="" loading="lazy" onerror="this.style.display=\'none\'">'
-      + '<span class="fallback" style="color:' + lc + '">' + esc(letter) + '</span>'
-      + '</div>'
-      + '<div class="card-body">'
-      + '<div class="card-title">' + esc(item.name) + '</div>'
+  function cardHTML(it, idx) {
+    var d = dm(it.href), desc = it.desc || '', l = fc(it.name);
+    var lc = LETTER_COLORS[(it.name.charCodeAt(0)||0) % LETTER_COLORS.length];
+    return '<a class="bookmark-card" style="transition-delay:' + (idx%20)*0.025 + 's" href="' + esc(it.href) + '" target="_blank" rel="noopener">'
+      + '<div class="card-favicon"><img src="' + fv(it.href) + '" alt="" loading="lazy" onerror="this.style.display=\'none\'"><span class="fb" style="color:' + lc + '">' + esc(l) + '</span></div>'
+      + '<div class="card-body"><div class="card-title">' + esc(it.name) + '</div>'
       + (desc ? '<div class="card-desc">' + esc(desc) + '</div>' : '')
-      + '<div class="card-domain">' + esc(d) + '</div>'
-      + '</div>'
-      + '<svg class="card-arrow" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>'
+      + '<div class="card-url">' + esc(d) + '</div></div>'
+      + '<svg class="card-arr" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>'
       + '</a>';
   }
 
-  // ─── Category Pills ───
-  var catNavInner = document.getElementById('catNavInner');
-  function renderPills() {
-    var h = '<span class="cat-pill' + (activeCategory === null ? ' active' : '') + '" data-cat="">全部<span class="pill-count">' + flatItems.length + '</span></span>';
+  // ─── Category tabs ───
+  var catBarInner = document.getElementById('catBarInner');
+  function renderTabs() {
+    var h = '<span class="cat-tab' + (activeCategory === null ? ' active' : '') + '" data-cat="">全部<span class="tab-num">' + flatItems.length + '</span></span>';
     for (var i = 0; i < categories.length; i++) {
       var c = categories[i];
-      h += '<span class="cat-pill' + (activeCategory === c.name ? ' active' : '') + '" data-cat="' + esc(c.name) + '">' + catIcon(c.name) + ' ' + esc(c.name) + '<span class="pill-count">' + c.children.length + '</span></span>';
+      h += '<span class="cat-tab' + (activeCategory === c.name ? ' active' : '') + '" data-cat="' + esc(c.name) + '">' + (ICONS[c.name]||'') + ' ' + esc(c.name) + '<span class="tab-num">' + c.children.length + '</span></span>';
     }
-    catNavInner.innerHTML = h;
-    catNavInner.querySelectorAll('.cat-pill').forEach(function(el) {
+    catBarInner.innerHTML = h;
+    catBarInner.querySelectorAll('.cat-tab').forEach(function(el) {
       el.addEventListener('click', function() { selectCategory(this.dataset.cat || null); });
     });
   }
   function selectCategory(name) {
-    activeCategory = name; renderPills();
+    activeCategory = name; renderTabs();
     document.getElementById('searchInput').value = ''; renderContent();
-    if (name) { setTimeout(function() { var e = document.getElementById('cat-' + name); if (e) e.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 100); }
+    if (name) setTimeout(function() { var e = document.getElementById('cat-' + name); if (e) e.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 60);
     else window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  // ─── AI Column Data ───
-  var AI_DATA = [
-    { icon:'🐬', title:'DeepSeek & 模型入门', tags:[
+  // ─── AI Data ───
+  var AI = [
+    { i:'🐬', t:'DeepSeek & 模型入门', g:[
       {n:'Ollama 本地部署',h:'https://ollama.com/'},{n:'DeepSeek 使用途径',h:'https://chat.deepseek.com/'},{n:'DeepSeek 专区',h:'https://platform.deepseek.com/'},{n:'入门技巧',h:'https://www.waytoagi.com/'},{n:'通用 AI 专区',h:'https://ai-bot.cn/'},{n:'本地部署流程',h:'https://ollama.com/blog'}
     ]},
-    { icon:'💻', title:'AI 编程 & API', tags:[
-      {n:'AI 编程教程',h:'https://www.trae.ai/'},{n:'API 调用指南',h:'https://platform.openai.com/docs/'},{n:'TRAE 开发上线 App',h:'https://www.trae.ai/'},{n:'n8n 自动化教程',h:'https://n8n.io/'}
+    { i:'💻', t:'AI 编程 & API', g:[
+      {n:'AI 编程教程',h:'https://www.trae.ai/'},{n:'API 调用指南',h:'https://platform.openai.com/docs/'},{n:'TRAE 开发 App',h:'https://www.trae.ai/'},{n:'n8n 自动化',h:'https://n8n.io/'}
     ]},
-    { icon:'🦾', title:'AI Agent & 自动化', tags:[
+    { i:'🦾', t:'AI Agent & 自动化', g:[
       {n:'AI Agent 专区',h:'https://www.coze.cn/'},{n:'MCP 保姆级教程',h:'https://modelcontextprotocol.io/'},{n:'OWL 快速启动',h:'https://github.com/camel-ai/owl'},{n:'OpenManus 指南',h:'https://github.com/mannaandpoem/OpenManus'},{n:'Agent Skills',h:'https://www.waytoagi.com/'}
     ]},
-    { icon:'🤵', title:'Claude Code 专区', tags:[
+    { i:'🤵', t:'Claude Code', g:[
       {n:'Claude Code 教程',h:'https://docs.anthropic.com/en/docs/claude-code'},{n:'Claude Code 实战',h:'https://github.com/anthropics/claude-code'}
     ]},
-    { icon:'🎨', title:'AI 图像 & 视频', tags:[
-      {n:'AI 生图专区',h:'https://www.liblib.art/'},{n:'Seedream 4.0 玩法',h:'https://seeddream.io/'},{n:'Flux Kontext 教程',h:'https://www.liblib.art/'},{n:'AIGC 视频课程',h:'https://www.bilibili.com/'},{n:'Nano Banana Pro',h:'https://www.liblib.art/'}
+    { i:'🎨', t:'AI 图像 & 视频', g:[
+      {n:'AI 生图专区',h:'https://www.liblib.art/'},{n:'Seedream 4.0',h:'https://seeddream.io/'},{n:'Flux Kontext',h:'https://www.liblib.art/'},{n:'AIGC 视频课',h:'https://www.bilibili.com/'},{n:'Nano Banana',h:'https://www.liblib.art/'}
     ]},
-    { icon:'📊', title:'提示词 & 测评', tags:[
-      {n:'提示词库',h:'https://www.aishort.top/'},{n:'四大模型测评',h:'https://lmarena.ai/'},{n:'Gemini 3.0 测评',h:'https://aistudio.google.com/'},{n:'AI 会议工具实测',h:'https://www.waytoagi.com/'},{n:'2025 AI 工具盘点',h:'https://ai-bot.cn/'},{n:'Index TTS2 语音',h:'https://github.com/IndexTeam/IndexTTS'}
+    { i:'📊', t:'提示词 & 测评', g:[
+      {n:'提示词库',h:'https://www.aishort.top/'},{n:'模型横评',h:'https://lmarena.ai/'},{n:'Gemini 3.0',h:'https://aistudio.google.com/'},{n:'AI 会议实测',h:'https://www.waytoagi.com/'},{n:'工具盘点',h:'https://ai-bot.cn/'},{n:'Index TTS2',h:'https://github.com/IndexTeam/IndexTTS'}
     ]}
   ];
 
-  // ─── Content ───
+  // ─── Render ───
   var mainContent = document.getElementById('mainContent');
   var navInfo = document.getElementById('navInfo');
 
   function renderContent() {
-    var query = document.getElementById('searchInput').value.trim().toLowerCase();
+    var q = document.getElementById('searchInput').value.trim().toLowerCase();
     var h = '', count = 0;
 
-    if (query) {
-      var results = [];
+    if (q) {
+      var rs = [];
       for (var i = 0; i < flatItems.length; i++) {
         var fi = flatItems[i];
-        if ((fi.item.name + ' ' + (fi.item.desc||'') + ' ' + fi.item.href + ' ' + fi.category).toLowerCase().indexOf(query) !== -1) results.push(fi);
+        if ((fi.it.name + ' ' + (fi.it.desc||'') + ' ' + fi.it.href + ' ' + fi.cat).toLowerCase().indexOf(q) !== -1) rs.push(fi);
       }
-      count = results.length;
-      h += '<div class="search-header"><h2>搜索 <span class="qh">"' + esc(query) + '"</span></h2><p>' + count + ' 个结果</p></div>';
-      if (count > 0) { h += '<div class="bookmark-grid">'; for (var r = 0; r < results.length; r++) h += cardHTML(results[r].item, r); h += '</div>'; }
+      count = rs.length;
+      h += '<div class="search-head"><h2><span class="q">"' + esc(q) + '"</span></h2><p>' + count + ' 个结果</p></div>';
+      if (count > 0) { h += '<div class="bookmark-grid">'; for (var r = 0; r < rs.length; r++) h += cardHTML(rs[r].it, r); h += '</div>'; }
     } else if (activeCategory) {
       var cat = null;
-      for (var c = 0; c < categories.length; c++) { if (categories[c].name === activeCategory) { cat = categories[c]; break; } }
+      for (var cc = 0; cc < categories.length; cc++) { if (categories[cc].name === activeCategory) { cat = categories[cc]; break; } }
       if (cat) { count = cat.children.length; h += renderSection(cat, 0, true); }
     } else {
       h += '<div class="hero">';
-      h += '<div class="badge">持续更新中</div>';
-      h += '<h1>贝塔<span class="hl">导航</span></h1>';
-      h += '<p>' + flatItems.length + ' 个精选网站，' + categories.length + ' 个主题分类，持续更新的互联网工具箱</p>';
-      h += '<div class="hero-stats">';
-      h += '<div class="hero-stat"><div class="val">' + flatItems.length + '</div><div class="lbl">精选书签</div></div>';
-      h += '<div class="hero-stat"><div class="val">' + categories.length + '</div><div class="lbl">分类主题</div></div>';
-      h += '<div class="hero-stat"><div class="val">2026</div><div class="lbl">持续维护</div></div>';
+      h += '<div class="label">持续更新中</div>';
+      h += '<h1>贝塔<em>导航</em></h1>';
+      h += '<p class="sub">' + flatItems.length + ' 个精选网站，' + categories.length + ' 个主题分类。<br>持续更新的互联网工具箱。</p>';
+      h += '<div class="hero-nums">';
+      h += '<div class="hero-num"><div class="n">' + flatItems.length + '</div><div class="l">精选书签</div></div>';
+      h += '<div class="hero-num"><div class="n">' + categories.length + '</div><div class="l">分类主题</div></div>';
+      h += '<div class="hero-num"><div class="n">2026</div><div class="l">持续维护</div></div>';
       h += '</div></div>';
 
       // AI Column
-      h += '<div class="ai-column">';
-      h += '<div class="ai-banner"><div class="ai-banner-icon">📡</div><div class="ai-banner-text"><h3>AI 探索专栏</h3><p>从入门到实战，精选 AI 工具、教程与资源</p></div></div>';
+      h += '<div class="sec-head"><div class="sec-icon">📡</div><h2>AI 探索专栏</h2><p>从入门到实战，精选 AI 工具、教程与资源。</p></div>';
       h += '<div class="ai-grid">';
-      for (var a = 0; a < AI_DATA.length; a++) {
-        var card = AI_DATA[a];
-        h += '<div class="ai-card" style="transition-delay:' + (a*0.06) + 's"><div class="ai-card-header"><span class="ai-card-icon">' + card.icon + '</span><h4>' + esc(card.title) + '</h4></div><div class="ai-card-items">';
-        for (var j = 0; j < card.tags.length; j++) {
-          h += '<a class="ai-tag" href="' + esc(card.tags[j].h) + '" target="_blank" rel="noopener">' + esc(card.tags[j].n) + '</a>';
-        }
+      for (var a = 0; a < AI.length; a++) {
+        var cd = AI[a];
+        h += '<div class="ai-card" style="transition-delay:' + (a*0.05) + 's"><div class="ai-card-head"><span class="ai-card-icon">' + cd.i + '</span><h4>' + esc(cd.t) + '</h4></div><div class="ai-tags">';
+        for (var j = 0; j < cd.g.length; j++) h += '<a class="ai-tag" href="' + esc(cd.g[j].h) + '" target="_blank" rel="noopener">' + esc(cd.g[j].n) + '</a>';
         h += '</div></div>';
       }
-      h += '</div></div>';
+      h += '</div>';
 
       count = flatItems.length;
       var idx = 0;
@@ -2616,14 +2593,14 @@ var BOOKMARK_DATA = [
       }
     }
 
-    navInfo.innerHTML = '<strong>' + count + '</strong> 个书签';
-    if (count === 0 && query) {
-      mainContent.innerHTML = '<div class="empty-state"><div class="empty-icon">🔍</div><h3>没有找到</h3><p style="font-size:14px">试试其他关键词</p></div>';
+    navInfo.textContent = count + ' 个书签';
+    if (count === 0 && q) {
+      mainContent.innerHTML = '<div class="empty-state"><div class="ei">🔍</div><h3>没有找到</h3><p style="font-size:14px">试试其他关键词</p></div>';
     } else {
       mainContent.innerHTML = h;
-      var obs = new IntersectionObserver(function(entries) {
-        entries.forEach(function(e) { if (e.isIntersecting) { e.target.classList.add('visible'); } });
-      }, { threshold: 0.06, rootMargin: '0px 0px -10px 0px' });
+      var obs = new IntersectionObserver(function(es) {
+        es.forEach(function(e) { if (e.isIntersecting) { e.target.classList.add('visible'); } });
+      }, { threshold: 0.06, rootMargin: '0px 0px -8px 0px' });
       mainContent.querySelectorAll('.bookmark-card, .cat-section, .ai-card').forEach(function(el) { obs.observe(el); });
     }
   }
@@ -2632,22 +2609,19 @@ var BOOKMARK_DATA = [
     var links = showAll ? cat.children : cat.children.slice(0, limit || 24);
     var more = !showAll && cat.children.length > (limit||24) ? cat.children.length - (limit||24) : 0;
     var h = '<div class="cat-section" id="cat-' + esc(cat.name) + '">';
-    h += '<div class="cat-header"><div class="cat-header-icon">' + catIcon(cat.name) + '</div><h3>' + esc(cat.name) + '</h3>';
+    h += '<div class="cat-sec-head"><div class="cat-sec-icon">' + (ICONS[cat.name]||'') + '</div><h3>' + esc(cat.name) + '</h3>';
     if (cat.description) h += '<p>' + esc(cat.description) + '</p>';
     h += '</div><div class="bookmark-grid">';
     for (var i = 0; i < links.length; i++) h += cardHTML(links[i], startIdx + i);
     h += '</div>';
-    if (more > 0) h += '<div class="view-more"><span class="view-more-btn" onclick="document.querySelector(\'.cat-pill[data-cat=\\\'' + esc(cat.name) + '\\\']\').click()">查看全部 ' + cat.children.length + ' 个 →</span></div>';
-    h += '</div>'; return h;
+    if (more > 0) h += '<div class="more-wrap"><span class="more-btn" onclick="document.querySelector(\'.cat-tab[data-cat=\\\'' + esc(cat.name) + '\\\']\').click()">查看全部 ' + cat.children.length + ' 个 &rarr;</span></div>';
+    return h + '</div>';
   }
 
-  // ─── Search ───
   document.getElementById('searchInput').addEventListener('input', function() {
-    if (this.value.trim()) { activeCategory = null; renderPills(); }
+    if (this.value.trim()) { activeCategory = null; renderTabs(); }
     renderContent();
   });
-
-  // ─── Keyboard shortcuts ───
   document.addEventListener('keydown', function(e) {
     if (e.key === '/' && document.activeElement !== document.getElementById('searchInput') && !e.target.closest('input,textarea,[contenteditable]')) {
       e.preventDefault(); document.getElementById('searchInput').focus();
@@ -2655,7 +2629,7 @@ var BOOKMARK_DATA = [
     if (e.key === 'Escape') { document.getElementById('searchInput').blur(); if (activeCategory) selectCategory(null); }
   });
 
-  renderPills();
+  renderTabs();
   renderContent();
 })();
 </script>
