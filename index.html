@@ -84,7 +84,7 @@
 
   /* ─── Section ─── */
   .cat-section {
-    margin-bottom: 40px;
+    margin-bottom: 48px;
     scroll-margin-top: 120px;
   }
   .sec-title {
@@ -96,18 +96,18 @@
   .sec-title h3 { font-size: 18px; font-weight: 700; }
   .sec-title .desc { font-size: 12px; color: var(--text-secondary); margin-left: 4px; }
 
-  /* ─── Grid (qijishow style) ─── */
-  .row { margin: 0 -8px; }
-  .row:after { clear: both; content: ''; display: table; }
-  [class*="col-"] { float: left; padding: 0 8px; margin-bottom: 18px; }
+  /* ─── Grid ─── */
+  .bookmark-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(165px, 1fr));
+    gap: 14px;
+    margin-bottom: 10px;
+  }
+  @media (max-width: 640px) { .bookmark-grid { grid-template-columns: repeat(3, 1fr); gap: 10px; } }
+  @media (max-width: 420px) { .bookmark-grid { grid-template-columns: repeat(2, 1fr); } }
 
-  @media (min-width: 1200px) { .col-lg-3 { width: 20%; } .col-lg-4 { width: 25%; } }
-  @media (min-width: 992px)  { .col-md-4 { width: 33.333%; } }
-  @media (min-width: 640px)  { .col-sm-6 { width: 50%; } }
-  @media (max-width: 639px)  { .col-xs-12 { width: 100%; } }
-
-  /* ─── Card (qijishow style) ─── */
-  .tool { margin-bottom: 0; }
+  /* ─── Card ─── */
+  .tool { }
 
   .tool-head { display: block; }
   .tool-img {
@@ -301,7 +301,7 @@ var BOOKMARK_DATA = [{"name": "AI 智能工具", "emoji": "🤖", "description":
   function cardHTML(it) {
     var d = dm(it.href), desc = it.desc || '', l = fc(it.name);
     var lc = LETTER_COLORS[(it.name.charCodeAt(0)||0) % LETTER_COLORS.length];
-    return '<div class="col-sm-6 col-md-4 col-lg-3 col-xs-12"><div class="tool"><a class="tool-head" href="' + esc(it.href) + '" target="_blank" rel="noopener">'
+    return '<div class="tool"><a class="tool-head" href="' + esc(it.href) + '" target="_blank" rel="noopener">'
       + '<div class="tool-img" style="background:linear-gradient(135deg,' + lc + '66,' + lc + '22)">'
       + '<img src="' + fv(it.href) + '" alt="" loading="lazy" onerror="var p=this.parentElement;var i2=document.createElement(\'img\');i2.src=\'' + fv2(it.href) + '\';i2.loading=\'lazy\';i2.style.cssText=\'width:52px;height:52px;border-radius:6px;background:rgba(255,255,255,0.9);padding:4px\';i2.onerror=function(){var fb=p.querySelector(\'.fb\');if(fb)fb.style.display=\'block\'};p.insertBefore(i2,p.querySelector(\'.fb\'))">'
       + '<span class="fb" style="display:none;position:absolute;font-size:28px;font-weight:700;color:rgba(255,255,255,0.9)">' + esc(l) + '</span>'
@@ -309,7 +309,7 @@ var BOOKMARK_DATA = [{"name": "AI 智能工具", "emoji": "🤖", "description":
       + '<div class="tool-title">' + esc(it.name) + '</div>'
       + '</a>'
       + '<div class="tool-body">' + (desc || d) + '</div>'
-      + '</div></div>';
+      + '</div>';
   }
 
   // ─── Tabs ───
@@ -357,7 +357,7 @@ var BOOKMARK_DATA = [{"name": "AI 智能工具", "emoji": "🤖", "description":
       }
       count = rs.length;
       h += '<div class="search-head"><h2><span class="q">"' + esc(q) + '"</span></h2><p>' + count + ' 个结果</p></div>';
-      if (count>0) { h += '<div class="row">'; for (var r=0;r<rs.length;r++) h += cardHTML(rs[r].it); h += '</div>'; }
+      if (count>0) { h += '<div class="bookmark-grid">'; for (var r=0;r<rs.length;r++) h += cardHTML(rs[r].it); h += '</div>'; }
     } else if (activeCategory) {
       var cat=null;
       for (var cc=0;cc<categories.length;cc++){if(categories[cc].name===activeCategory){cat=categories[cc];break;}}
@@ -410,7 +410,7 @@ var BOOKMARK_DATA = [{"name": "AI 智能工具", "emoji": "🤖", "description":
   function buildSection(cat, showAll) {
     var h = '<div class="cat-section" id="cat-' + esc(cat.name) + '">';
     h += '<div class="sec-title"><span class="emoji">' + (cat.emoji||'') + '</span><h3>' + esc(cat.name) + '</h3><span class="desc">' + esc(cat.description||'') + '</span></div>';
-    h += '<div class="row">';
+    h += '<div class="bookmark-grid">';
     for (var gi=0;gi<cat.groups.length;gi++) {
       var g=cat.groups[gi];
       for (var si=0;si<g.subgroups.length;si++) {
