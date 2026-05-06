@@ -300,14 +300,12 @@ var BOOKMARK_DATA = [{"name": "AI 智能工具", "emoji": "🤖", "description":
     var d = dm(it.href), desc = it.desc || '', l = fc(it.name);
     var lc = LETTER_COLORS[(it.name.charCodeAt(0)||0) % LETTER_COLORS.length];
     var host = ''; try { host = new URL(it.href).hostname; } catch(e) {}
-    var fav1 = host ? 'https://' + host + '/favicon.ico' : '';
-    var fav2 = host ? 'https://api.iowen.cn/favicon/' + host + '.png' : '';
-    var fav3 = host ? 'https://api.allorigins.win/raw?url=https://' + host + '/favicon.ico' : '';
 
     return '<div class="tool"><a class="tool-head" href="' + esc(it.href) + '" target="_blank" rel="noopener">'
       + '<div class="tool-img" style="background:linear-gradient(135deg,' + lc + '66,' + lc + '22)">'
       + '<span class="tool-letter" style="color:' + lc + '">' + esc(l) + '</span>'
-      + '<img class="t-icon" src="' + fav1 + '" alt="" loading="lazy" data-fav2="' + esc(fav2) + '" data-fav3="' + esc(fav3) + '" data-letter="' + esc(l) + '"'
+      + '<img class="t-icon" src="https://' + esc(host||'') + '/favicon.ico" alt="" loading="lazy"'
+      + ' style="width:52px;height:52px;border-radius:6px;background:rgba(255,255,255,0.9);padding:4px;object-fit:contain">'
       + ' style="width:52px;height:52px;border-radius:6px;background:rgba(255,255,255,0.9);padding:4px;object-fit:contain">'
       + '</div>'
       + '<div class="tool-title">' + esc(it.name) + '</div>'
@@ -382,46 +380,19 @@ var BOOKMARK_DATA = [{"name": "AI 智能工具", "emoji": "🤖", "description":
     if (count===0 && q) { mainContent.innerHTML = '<div class="empty-state"><div class="ei">🔍</div><p>没有找到</p></div>'; return; }
     mainContent.innerHTML = h;
 
-    // Icon: 3-source fallback chain
-    setTimeout(function checkIcons() {
-      document.querySelectorAll('.t-icon:not([data-checked])').forEach(function(img) {
-        img.dataset.checked = '1';
-        if (img.complete && img.naturalWidth > 0) {
-          var fb = img.parentElement.querySelector('.tool-letter');
-          if (fb) fb.remove();
-        } else if (img.dataset.fav2 && !img.dataset.tried2) {
-          img.dataset.tried2 = '1';
-          img.src = img.dataset.fav2;
-          setTimeout(function(i) {
-            if (i.complete && i.naturalWidth > 0) {
-              var fb = i.parentElement.querySelector('.tool-letter');
-              if (fb) fb.remove();
-            } else if (i.dataset.fav3 && !i.dataset.tried3) {
-              i.dataset.tried3 = '1';
-              i.src = i.dataset.fav3;
-              setTimeout(function(j) {
-                if (j.complete && j.naturalWidth > 0) {
-                  var fb = j.parentElement.querySelector('.tool-letter');
-                  if (fb) fb.remove();
-                } else {
-                  j.style.display = 'none';
-                  var fb = j.parentElement.querySelector('.tool-letter');
-                  if (fb) fb.style.display = 'flex';
-                }
-              }, 1500, i);
-            } else {
-              i.style.display = 'none';
-              var fb = i.parentElement.querySelector('.tool-letter');
-              if (fb) fb.style.display = 'flex';
-            }
-          }, 1200, img);
-        } else {
+    // If favicon doesn't load after 1s, show letter fallback
+    setTimeout(function() {
+      document.querySelectorAll('.t-icon').forEach(function(img) {
+        if (!img.complete || !img.naturalWidth) {
           img.style.display = 'none';
           var fb = img.parentElement.querySelector('.tool-letter');
           if (fb) fb.style.display = 'flex';
+        } else {
+          var fb = img.parentElement.querySelector('.tool-letter');
+          if (fb) fb.remove();
         }
       });
-    }, 800);
+    }, 1000);
   }
 
   // ─── AI Column ───
