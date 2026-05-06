@@ -118,25 +118,22 @@
     transition: all 0.4s;
     margin-bottom: 8px;
   }
-  .tool-img img {
-    width: 52px; height: 52px;
-    transition: all 0.4s;
-    border-radius: 6px;
+  .tool-letter {
+    font-size: 34px; font-weight: 700;
     background: rgba(255,255,255,0.9);
-    padding: 4px;
+    border-radius: 8px;
+    width: 56px; height: 56px;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.4s;
+  }
+  .tool-img:hover .tool-letter {
+    transform: scale(1.12) rotate(8deg);
   }
   .tool-img:hover {
     box-shadow: 0 24px 28px -16px rgba(0,0,0,0.26);
     transform: translateY(-4px);
   }
-  .tool-img:hover img {
-    transform: scale(1.15) rotate(8deg);
-  }
-  .tool-img .fav2 {
-    display: none;
-  }
-
-  .tool-title {
+.tool-title {
     font-size: 14px; font-weight: 700; color: #1d1d1f;
     line-height: 1.3; margin-bottom: 2px;
     overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
@@ -294,17 +291,15 @@ var BOOKMARK_DATA = [{"name": "AI 智能工具", "emoji": "🤖", "description":
 
   function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/'/g,'&#39;'); }
   function dm(u) { try { return new URL(u).hostname.replace(/^www\./, ''); } catch(e) { return u; } }
-  function fv(u) { try { return 'https://www.google.com/s2/favicons?domain=' + new URL(u).hostname + '&sz=64'; } catch(e) { return ''; } }
-  function fv2(u) { try { return 'https://' + new URL(u).hostname + '/favicon.ico'; } catch(e) { return ''; } }
   function fc(s) { var m=s.trim().match(/[一-鿿]/);if(m)return m[0];m=s.trim().match(/[a-zA-Z]/);if(m)return m[0].toUpperCase();return s.trim().charAt(0).toUpperCase(); }
 
   function cardHTML(it) {
     var d = dm(it.href), desc = it.desc || '', l = fc(it.name);
     var lc = LETTER_COLORS[(it.name.charCodeAt(0)||0) % LETTER_COLORS.length];
+
     return '<div class="tool"><a class="tool-head" href="' + esc(it.href) + '" target="_blank" rel="noopener">'
       + '<div class="tool-img" style="background:linear-gradient(135deg,' + lc + '66,' + lc + '22)">'
-      + '<img src="' + fv(it.href) + '" alt="" loading="lazy" onerror="var p=this.parentElement;var i2=document.createElement(\'img\');i2.src=\'' + fv2(it.href) + '\';i2.loading=\'lazy\';i2.style.cssText=\'width:52px;height:52px;border-radius:6px;background:rgba(255,255,255,0.9);padding:4px\';i2.onerror=function(){var fb=p.querySelector(\'.fb\');if(fb)fb.style.display=\'block\'};p.insertBefore(i2,p.querySelector(\'.fb\'))">'
-      + '<span class="fb" style="display:none;position:absolute;font-size:28px;font-weight:700;color:rgba(255,255,255,0.9)">' + esc(l) + '</span>'
+      + '<span class="tool-letter" style="color:' + lc + '">' + esc(l) + '</span>'
       + '</div>'
       + '<div class="tool-title">' + esc(it.name) + '</div>'
       + '</a>'
@@ -377,6 +372,7 @@ var BOOKMARK_DATA = [{"name": "AI 智能工具", "emoji": "🤖", "description":
 
     if (count===0 && q) { mainContent.innerHTML = '<div class="empty-state"><div class="ei">🔍</div><p>没有找到</p></div>'; return; }
     mainContent.innerHTML = h;
+
   }
 
   // ─── AI Column ───
