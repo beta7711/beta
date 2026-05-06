@@ -126,12 +126,10 @@
     display: flex; align-items: center; justify-content: center;
     transition: all 0.4s;
   }
-  .tool-img:hover .tool-letter,
-  .tool-img:hover .t-icon {
+  .tool-letter img { width:52px; height:52px; border-radius:6px; display:block; }
+  .tool-img:hover .tool-letter {
     transform: scale(1.12) rotate(8deg);
   }
-  .t-icon { display: inline; }
-  .t-icon[style*="display: none"] + .tool-letter { display: flex !important; }
   .tool-img:hover {
     box-shadow: 0 24px 28px -16px rgba(0,0,0,0.26);
     transform: translateY(-4px);
@@ -296,24 +294,20 @@ var BOOKMARK_DATA = [{"name": "AI 智能工具", "emoji": "🤖", "description":
   function dm(u) { try { return new URL(u).hostname.replace(/^www\./, ''); } catch(e) { return u; } }
   function fc(s) { var m=s.trim().match(/[一-鿿]/);if(m)return m[0];m=s.trim().match(/[a-zA-Z]/);if(m)return m[0].toUpperCase();return s.trim().charAt(0).toUpperCase(); }
 
-  function cardHTML(it) {
+    function cardHTML(it) {
     var d = dm(it.href), desc = it.desc || '', l = fc(it.name);
     var lc = LETTER_COLORS[(it.name.charCodeAt(0)||0) % LETTER_COLORS.length];
     var host = ''; try { host = new URL(it.href).hostname; } catch(e) {}
 
-    return '<div class="tool"><a class="tool-head" href="' + esc(it.href) + '" target="_blank" rel="noopener">'
+    return '<div class="tool" data-host="' + esc(host) + '" data-letter="' + esc(l) + '" data-color="' + lc + '"><a class="tool-head" href="' + esc(it.href) + '" target="_blank" rel="noopener">'
       + '<div class="tool-img" style="background:linear-gradient(135deg,' + lc + '66,' + lc + '22)">'
       + '<span class="tool-letter" style="color:' + lc + '">' + esc(l) + '</span>'
-      + '<img class="t-icon" src="https://' + esc(host||'') + '/favicon.ico" alt="" loading="lazy"'
-      + ' style="width:52px;height:52px;border-radius:6px;background:rgba(255,255,255,0.9);padding:4px;object-fit:contain">'
-      + ' style="width:52px;height:52px;border-radius:6px;background:rgba(255,255,255,0.9);padding:4px;object-fit:contain">'
       + '</div>'
       + '<div class="tool-title">' + esc(it.name) + '</div>'
       + '</a>'
       + '<div class="tool-body">' + (desc || d) + '</div>'
       + '</div>';
   }
-
   // ─── Tabs ───
   var catBarInner = document.getElementById('catBarInner');
   function renderTabs() {
@@ -380,19 +374,41 @@ var BOOKMARK_DATA = [{"name": "AI 智能工具", "emoji": "🤖", "description":
     if (count===0 && q) { mainContent.innerHTML = '<div class="empty-state"><div class="ei">🔍</div><p>没有找到</p></div>'; return; }
     mainContent.innerHTML = h;
 
-    // If favicon doesn't load after 1s, show letter fallback
-    setTimeout(function() {
-      document.querySelectorAll('.t-icon').forEach(function(img) {
-        if (!img.complete || !img.naturalWidth) {
-          img.style.display = 'none';
-          var fb = img.parentElement.querySelector('.tool-letter');
-          if (fb) fb.style.display = 'flex';
-        } else {
-          var fb = img.parentElement.querySelector('.tool-letter');
-          if (fb) fb.remove();
-        }
+    // Parallel favicon loading: try all sources, use first that works
+    var FAV_SOURCES = [
+      function(h) { return 'https://' + h + '/favicon.ico'; },
+      function(h) { return 'https://api.iowen.cn/favicon/' + h + '.png'; },
+      function(h) { return 'https://www.google.com/s2/favicons?domain=' + h + '&sz=64'; },
+      function(h) { return 'https://icons.duckduckgo.com/ip3/' + h + '.ico'; },
+    ];
+    document.querySelectorAll('.tool[data-host]').forEach(function(tool) {
+      var host = tool.dataset.host;
+      var letter = tool.dataset.letter;
+      var color = tool.dataset.color;
+      if (!host) return;
+      var loaded = false;
+      var attempts = 0;
+      FAV_SOURCES.forEach(function(srcFn) {
+        var img = new Image();
+        img.onload = function() {
+          if (!loaded) {
+            loaded = true;
+            var fb = tool.querySelector('.tool-letter');
+            if (fb) {
+              fb.textContent = '';
+              fb.style.background = 'rgba(255,255,255,0.9)';
+              fb.style.borderRadius = '6px';
+              fb.style.padding = '4px';
+              fb.innerHTML = '<img src="' + this.src + '" style="width:52px;height:52px;object-fit:contain;display:block">';
+            }
+          }
+        };
+        img.onerror = function() {
+          attempts++;
+        };
+        img.src = srcFn(host);
       });
-    }, 1000);
+    });
   }
 
   // ─── AI Column ───
