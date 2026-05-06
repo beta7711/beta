@@ -192,6 +192,15 @@
     gap: 16px;
     margin-bottom: 80px;
   }
+  .bm-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+  @media (min-width: 1400px) { .bm-grid { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); } }
+  @media (max-width: 640px) { .bm-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 420px) { .bm-grid { grid-template-columns: 1fr; } }
   .ai-card {
     background: var(--card-bg);
     border: 1px solid var(--border);
@@ -521,21 +530,22 @@ var BOOKMARK_DATA = [{"name": "AI 智能工具", "emoji": "🤖", "description":
     h += '<div class="cat-sec-head"><div class="cat-sec-icon">' + (cat.emoji||'') + '</div><h3>' + esc(cat.name) + '</h3>';
     if (cat.description) h += '<p>' + esc(cat.description) + '</p>';
     h += '</div>';
+    var itemIdx = 0;
     for (var gi = 0; gi < cat.groups.length; gi++) {
       var g = cat.groups[gi];
-      if (cat.groups.length > 1) h += '<div class="cat-sec-sub"><div class="cat-sec-icon" style="font-size:22px">' + g.icon + '</div><h4>' + esc(g.name) + '</h4></div>';
-      h += '<div class="ai-grid" style="margin-bottom:14px">';
+      if (cat.groups.length > 1) {
+        h += '<div class="cat-sec-sub"><div class="cat-sec-icon" style="font-size:22px">' + g.icon + '</div><h4>' + esc(g.name) + '</h4></div>';
+      }
+      var allItems = [];
       for (var si = 0; si < g.subgroups.length; si++) {
-        var sg = g.subgroups[si];
-        h += '<div class="ai-card" style="transition-delay:' + (si*0.04) + 's">';
-        h += '<div class="ai-card-head"><span class="ai-card-icon">' + sg.icon + '</span><h4>' + esc(sg.name) + '</h4></div>';
-        h += '<div class="ai-tags">';
-        var showN = showAll ? sg.children.length : Math.min(sg.children.length, limit || 24);
-        for (var sj = 0; sj < showN; sj++) {
-          var it = sg.children[sj];
-          h += '<a class="ai-tag" href="' + esc(it.href) + '" target="_blank" rel="noopener">' + esc(it.name) + '</a>';
+        for (var sj = 0; sj < g.subgroups[si].children.length; sj++) {
+          allItems.push(g.subgroups[si].children[sj]);
         }
-        h += '</div></div>';
+      }
+      var showN = showAll ? allItems.length : Math.min(allItems.length, limit || 24);
+      h += '<div class="bm-grid">';
+      for (var sj = 0; sj < showN; sj++) {
+        h += cardHTML(allItems[sj], itemIdx++);
       }
       h += '</div>';
     }
