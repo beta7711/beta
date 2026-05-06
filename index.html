@@ -46,7 +46,7 @@
   }
   .nav-inner {
     display: flex; align-items: center; justify-content: space-between;
-    max-width: 1024px; width: 100%; padding: 0 22px;
+    width: 100%; padding: 0 28px;
   }
   .nav-logo {
     font-size: 17px; font-weight: 600; color: #fff;
@@ -90,8 +90,7 @@
   }
   .cat-bar-inner {
     display: flex; align-items: center; gap: 0;
-    max-width: 1024px; width: 100%;
-    padding: 0 22px;
+    width: 100%; padding: 0 28px;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
   }
@@ -127,8 +126,7 @@
 
   /* ═══ Main content ═══ */
   .main-content {
-    max-width: 980px; margin: 0 auto;
-    padding: 0 22px 100px;
+    padding: 60px 28px 100px;
   }
 
   /* ═══ Hero ═══ */
@@ -194,11 +192,10 @@
   }
   .bm-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
     gap: 10px;
     margin-bottom: 14px;
   }
-  @media (min-width: 1400px) { .bm-grid { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); } }
   @media (max-width: 640px) { .bm-grid { grid-template-columns: repeat(2, 1fr); } }
   @media (max-width: 420px) { .bm-grid { grid-template-columns: 1fr; } }
   .ai-card {
@@ -250,7 +247,8 @@
   /* ═══ Bookmark grid ═══ */
   .bookmark-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 10px;
     gap: 12px;
   }
   .bookmark-card {
@@ -343,7 +341,7 @@
     .cat-bar-inner { padding: 0 16px; }
     .cat-tab { padding: 14px 10px; font-size: 11px; }
     .cat-tab::after { left: 10px; right: 10px; }
-    .main-content { padding: 0 16px 80px; }
+    .main-content { padding: 40px 16px 80px; }
     .hero { padding: 60px 0 48px; }
     .hero h1 { font-size: 32px; letter-spacing: -1px; }
     .hero .sub { font-size: 17px; }
