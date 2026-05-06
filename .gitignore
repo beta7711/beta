@@ -1,0 +1,6 @@
+__pycache__/
+*.py
+*.json
+*.pyc
+bookmarks_data.js
+.claude/
