@@ -227,8 +227,8 @@
     width: 36px; height: 36px;
     border-radius: 8px;
     position: relative; z-index: 1;
-    background: rgba(255,255,255,0.25);
-    padding: 4px;
+    background: rgba(255,255,255,0.9);
+    padding: 3px;
     object-fit: contain;
   }
   .bm-card-head .fb {
@@ -236,8 +236,59 @@
     font-size: 22px; font-weight: 700;
     color: rgba(255,255,255,0.9);
   }
+  .bm-card-head .fav2 {
+    display: none; width: 36px; height: 36px; border-radius: 8px;
+    position: absolute; z-index: 2;
+    background: rgba(255,255,255,0.9); padding: 3px;
+    object-fit: contain;
+  }
 
   .bm-card-body { padding: 12px 14px 14px; }
+
+  /* ═══ Right Sidebar (qijishow style) ═══ */
+  .side-nav {
+    position: fixed; right: 0; top: 50%; transform: translateY(-50%);
+    z-index: 40;
+    display: flex; flex-direction: column;
+    gap: 0;
+  }
+  .side-item {
+    display: flex; align-items: center; justify-content: flex-end;
+    gap: 8px;
+    cursor: pointer; user-select: none;
+    text-decoration: none; color: var(--text-secondary);
+    padding: 10px 10px 10px 14px;
+    border-radius: 8px 0 0 8px;
+    transition: all 0.25s ease;
+    position: relative;
+    background: rgba(255,255,255,0.5);
+    backdrop-filter: blur(12px);
+    margin-bottom: 2px;
+    border: 1px solid var(--border);
+    border-right: none;
+  }
+  .side-item:hover {
+    color: var(--text);
+    background: rgba(255,255,255,0.9);
+    width: auto;
+  }
+  .side-item .side-icon {
+    font-size: 18px; flex-shrink: 0;
+    width: 28px; text-align: center;
+  }
+  .side-item .side-label {
+    font-size: 11px; font-weight: 500; white-space: nowrap;
+    max-width: 0; overflow: hidden;
+    transition: max-width 0.25s ease;
+  }
+  .side-item:hover .side-label {
+    max-width: 120px;
+  }
+  .side-item.active {
+    color: var(--blue);
+    border-left: 3px solid var(--blue);
+  }
+  @media (max-width: 768px) { .side-nav { display: none; } }
   .bm-card-title {
     font-size: 13px; font-weight: 600; letter-spacing: -0.1px;
     line-height: 1.35; color: var(--text);
@@ -377,6 +428,7 @@
   <div class="cat-bar-inner" id="catBarInner"></div>
 </div>
 
+<nav class="side-nav" id="sideNav"></nav>
 <main class="main-content" id="mainContent"></main>
 
 <footer>Copyright © 2026 贝塔导航。保留所有权利。</footer>
@@ -407,7 +459,9 @@ var BOOKMARK_DATA = [{"name": "AI 智能工具", "emoji": "🤖", "description":
     return String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/'/g,'&#39;');
   }
   function dm(u) { try { return new URL(u).hostname.replace(/^www\./, ''); } catch(e) { return u; } }
-  function fv(u) { try { return 'https://www.google.com/s2/favicons?domain=' + new URL(u).hostname + '&sz=64'; } catch(e) { return ''; } }
+  function fv(u) { try { var h = new URL(u).hostname; return 'https://www.google.com/s2/favicons?domain=' + h + '&sz=64'; } catch(e) { return ''; } }
+  function fv2(u) { try { var h = new URL(u).hostname; return 'https://' + h + '/favicon.ico'; } catch(e) { return ''; } }
+  function fv3(u) { try { var h = new URL(u).hostname; return 'https://api.allorigins.win/raw?url=https://' + h + '/favicon.ico'; } catch(e) { return ''; } }
   function fc(s) {
     var m = s.trim().match(/[一-鿿]/); if (m) return m[0];
     m = s.trim().match(/[a-zA-Z]/); if (m) return m[0].toUpperCase();
@@ -417,9 +471,12 @@ var BOOKMARK_DATA = [{"name": "AI 智能工具", "emoji": "🤖", "description":
   function cardHTML(it, idx) {
     var d = dm(it.href), desc = it.desc || '', l = fc(it.name);
     var lc = LETTER_COLORS[(it.name.charCodeAt(0)||0) % LETTER_COLORS.length];
+    var host = '';
+    try { host = new URL(it.href).hostname; } catch(e) {}
     return '<a class="bm-card" style="transition-delay:' + (idx%20)*0.025 + 's" href="' + esc(it.href) + '" target="_blank" rel="noopener">'
       + '<div class="bm-card-head" style="background:linear-gradient(135deg,' + lc + '88,' + lc + '44)">'
-      + '<img src="' + fv(it.href) + '" alt="" loading="lazy" onerror="this.parentElement.querySelector(\'.fb\').style.display=\'flex\';this.style.display=\'none\'"><span class="fb" style="display:none">' + esc(l) + '</span>'
+      + '<img src="' + fv(it.href) + '" alt="" loading="lazy" onerror="var p=this.parentElement;var i2=document.createElement(\'img\');i2.src=\'' + fv2(it.href) + '\';i2.loading=\'lazy\';i2.onerror=function(){p.querySelector(\'.fb\').style.display=\'flex\'};p.insertBefore(i2,p.querySelector(\'.fb\'))">'
+      + '<span class="fb" style="display:none">' + esc(l) + '</span>'
       + '</div>'
       + '<div class="bm-card-body">'
       + '<div class="bm-card-title">' + esc(it.name) + '</div>'
@@ -442,6 +499,29 @@ var BOOKMARK_DATA = [{"name": "AI 智能工具", "emoji": "🤖", "description":
       el.addEventListener('click', function() { selectCategory(this.dataset.cat || null); });
     });
   }
+
+  // ─── Right Sidebar ───
+  var sideNav = document.getElementById('sideNav');
+
+  function buildSidebar() {
+    if (activeCategory) { sideNav.style.display = 'none'; return; }
+    sideNav.style.display = '';
+    var h = '';
+    for (var i = 0; i < categories.length; i++) {
+      var c = categories[i];
+      h += '<a class="side-item" href="#cat-' + esc(c.name) + '"><span class="side-icon">' + (c.emoji||'') + '</span><span class="side-label">' + esc(c.name) + '</span></a>';
+    }
+    sideNav.innerHTML = h;
+  }
+
+  // Scroll-spy
+  var sideItems = [];
+  document.addEventListener('scroll', function() {
+    if (activeCategory || !sideNav.style.display) return;
+    var scrollY = window.scrollY;
+    // Update on next frame
+  });
+
   function selectCategory(name) {
     activeCategory = name; renderTabs();
     document.getElementById('searchInput').value = ''; renderContent();
@@ -518,6 +598,12 @@ var BOOKMARK_DATA = [{"name": "AI 智能工具", "emoji": "🤖", "description":
       for (var d = 0; d < categories.length; d++) {
         h += renderSection(categories[d], 0, false, 36);
       }
+    }
+
+    // Build sidebar for all view, hide for search/single cat
+    if (typeof buildSidebar === 'function') {
+      if (!q && !activeCategory) buildSidebar();
+      else sideNav.style.display = 'none';
     }
 
     navInfo.textContent = count + ' 个书签';
