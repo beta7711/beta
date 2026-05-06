@@ -159,6 +159,95 @@
   }
   .hero-stat .lbl { font-size: 12px; color: var(--text-muted); }
 
+  /* ─── AI Column ─── */
+  .ai-column {
+    margin-bottom: 48px;
+    opacity: 0; transform: translateY(30px);
+    transition: all 0.6s cubic-bezier(0.4,0,0.2,1);
+  }
+  .ai-column.visible { opacity: 1; transform: translateY(0); }
+
+  .ai-banner {
+    display: flex; align-items: center; gap: 16px;
+    padding: 20px 24px;
+    margin-bottom: 20px;
+    background: linear-gradient(135deg, rgba(167,139,250,0.08), rgba(96,165,250,0.06));
+    border: 1px solid rgba(167,139,250,0.15);
+    border-radius: var(--radius-lg);
+  }
+  .ai-banner-icon {
+    font-size: 36px; flex-shrink: 0;
+    width: 56px; height: 56px;
+    display: flex; align-items: center; justify-content: center;
+    background: rgba(167,139,250,0.12);
+    border-radius: 16px;
+  }
+  .ai-banner-text h3 {
+    font-size: 16px; font-weight: 700; margin-bottom: 4px;
+  }
+  .ai-banner-text p {
+    font-size: 12px; color: var(--text-muted); line-height: 1.5;
+  }
+  .ai-banner-tag {
+    margin-left: auto; flex-shrink: 0;
+    font-size: 11px; color: var(--accent-1);
+    background: rgba(167,139,250,0.1);
+    padding: 4px 12px; border-radius: 50px;
+    white-space: nowrap;
+  }
+
+  .ai-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 10px;
+  }
+
+  .ai-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 18px 20px;
+    transition: all 0.35s cubic-bezier(0.4,0,0.2,1);
+    opacity: 0; transform: translateY(20px);
+  }
+  .ai-card.visible { opacity: 1; transform: translateY(0); }
+  .ai-card:hover {
+    background: var(--surface-hover);
+    border-color: rgba(167,139,250,0.25);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 24px rgba(0,0,0,0.2);
+  }
+  .ai-card-header {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 10px;
+  }
+  .ai-card-icon {
+    font-size: 20px; flex-shrink: 0;
+  }
+  .ai-card-header h4 {
+    font-size: 14px; font-weight: 700;
+    letter-spacing: -0.2px;
+  }
+  .ai-card-header .ai-card-count {
+    margin-left: auto; font-size: 11px; color: var(--text-muted);
+  }
+  .ai-card-items {
+    display: flex; flex-wrap: wrap; gap: 6px;
+  }
+  .ai-tag {
+    font-size: 11px; color: var(--text-secondary);
+    background: rgba(255,255,255,0.04);
+    padding: 4px 10px; border-radius: 6px;
+    transition: all var(--transition);
+    text-decoration: none;
+    border: 1px solid transparent;
+  }
+  .ai-tag:hover {
+    color: #fff;
+    background: rgba(167,139,250,0.12);
+    border-color: rgba(167,139,250,0.2);
+  }
+
   /* ─── Category pills ─── */
   .cat-nav {
     position: sticky; top: 68px; z-index: 50;
@@ -388,6 +477,7 @@
     .cat-nav-inner { padding: 0 16px; }
     .main-content { padding: 0 16px 60px; }
     .bookmark-grid { grid-template-columns: 1fr; }
+    .ai-grid { grid-template-columns: 1fr; }
     .cat-header { flex-wrap: wrap; }
   }
 </style>
@@ -2670,6 +2760,9 @@
       h += '<div class="hero-stat"><span class="val">2026</span><span class="lbl">持续维护</span></div>';
       h += '</div></div>';
 
+      // AI Column
+      h += renderAIColumn();
+
       count = flatItems.length;
       var idx = 0;
       for (var d = 0; d < categories.length; d++) {
@@ -2688,6 +2781,106 @@
       observeCards();
       observeSections();
     }
+  }
+
+  // ─── AI Column ───
+  var AI_COLUMN = [
+    {
+      icon: '🐬', title: 'DeepSeek & 模型入门',
+      desc: '从零上手大模型，本地部署到实战应用',
+      tags: [
+        { name: 'Ollama 本地部署', href: 'https://ollama.com/' },
+        { name: 'DeepSeek 使用途径', href: 'https://chat.deepseek.com/' },
+        { name: 'DeepSeek 专区', href: 'https://platform.deepseek.com/' },
+        { name: '入门技巧', href: 'https://www.waytoagi.com/' },
+        { name: '通用 AI 专区', href: 'https://ai-bot.cn/' },
+        { name: '本地部署流程', href: 'https://ollama.com/blog' },
+      ]
+    },
+    {
+      icon: '💻', title: 'AI 编程 & API',
+      desc: '用 AI 写代码、调接口，效率翻倍',
+      tags: [
+        { name: 'AI 编程教程', href: 'https://www.trae.ai/' },
+        { name: 'API 调用指南', href: 'https://platform.openai.com/docs/' },
+        { name: 'TRAE 开发上线 App', href: 'https://www.trae.ai/' },
+        { name: 'n8n 自动化教程', href: 'https://n8n.io/' },
+      ]
+    },
+    {
+      icon: '🦾', title: 'AI Agent & 自动化',
+      desc: '智能体开发、MCP协议、工作流自动化',
+      tags: [
+        { name: 'AI Agent 专区', href: 'https://www.coze.cn/' },
+        { name: 'MCP 保姆级教程', href: 'https://modelcontextprotocol.io/' },
+        { name: 'OWL 快速启动', href: 'https://github.com/camel-ai/owl' },
+        { name: 'OpenManus 指南', href: 'https://github.com/mannaandpoem/OpenManus' },
+        { name: 'Agent Skills', href: 'https://www.waytoagi.com/' },
+      ]
+    },
+    {
+      icon: '🤵', title: 'Claude Code 专区',
+      desc: '最强 AI 编程助手，命令行里的超级工程师',
+      tags: [
+        { name: 'Claude Code 教程', href: 'https://docs.anthropic.com/en/docs/claude-code' },
+        { name: 'Claude Code 实战', href: 'https://github.com/anthropics/claude-code' },
+      ]
+    },
+    {
+      icon: '🎨', title: 'AI 图像 & 视频',
+      desc: 'AI 生图、视频创作，从工具到教程全覆盖',
+      tags: [
+        { name: 'AI 生图专区', href: 'https://www.liblib.art/' },
+        { name: 'Seedream 4.0 玩法', href: 'https://seeddream.io/' },
+        { name: 'Flux Kontext 教程', href: 'https://www.liblib.art/' },
+        { name: 'AIGC 视频课程', href: 'https://www.bilibili.com/' },
+        { name: 'Nano Banana Pro', href: 'https://www.liblib.art/' },
+      ]
+    },
+    {
+      icon: '📊', title: '提示词 & 测评',
+      desc: '精选提示词库、模型横评、工具盘点',
+      tags: [
+        { name: '提示词库', href: 'https://www.aishort.top/' },
+        { name: '四大模型测评', href: 'https://lmarena.ai/' },
+        { name: 'Gemini 3.0 测评', href: 'https://aistudio.google.com/' },
+        { name: 'AI 会议工具实测', href: 'https://www.waytoagi.com/' },
+        { name: '2025 AI 工具盘点', href: 'https://ai-bot.cn/' },
+        { name: 'Index TTS2 语音', href: 'https://github.com/IndexTeam/IndexTTS' },
+      ]
+    },
+  ];
+
+  function renderAIColumn() {
+    var h = '';
+    h += '<div class="ai-column">';
+    h += '<div class="ai-banner">';
+    h += '<div class="ai-banner-icon">📡</div>';
+    h += '<div class="ai-banner-text">';
+    h += '<h3>AI 探索专栏</h3>';
+    h += '<p>从入门到实战，精选 AI 工具 · 教程 · 资源，持续更新</p>';
+    h += '</div>';
+    h += '<span class="ai-banner-tag">&#9733; 贝塔精选</span>';
+    h += '</div>';
+    h += '<div class="ai-grid">';
+    for (var i = 0; i < AI_COLUMN.length; i++) {
+      var card = AI_COLUMN[i];
+      h += '<div class="ai-card" style="transition-delay:' + (i * 0.05) + 's">';
+      h += '<div class="ai-card-header">';
+      h += '<span class="ai-card-icon">' + card.icon + '</span>';
+      h += '<h4>' + esc(card.title) + '</h4>';
+      h += '<span class="ai-card-count">' + card.tags.length + ' 项</span>';
+      h += '</div>';
+      h += '<div class="ai-card-items">';
+      for (var j = 0; j < card.tags.length; j++) {
+        var tag = card.tags[j];
+        h += '<a class="ai-tag" href="' + esc(tag.href) + '" target="_blank" rel="noopener">' + esc(tag.name) + '</a>';
+      }
+      h += '</div>';
+      h += '</div>';
+    }
+    h += '</div></div>';
+    return h;
   }
 
   function renderSection(cat, startIdx, showAll, limit) {
@@ -2721,14 +2914,14 @@
     var obs = new IntersectionObserver(function(entries) {
       entries.forEach(function(e) { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
     }, { threshold: 0.05, rootMargin: '0px 0px -10px 0px' });
-    mainContent.querySelectorAll('.bookmark-card').forEach(function(el) { obs.observe(el); });
+    mainContent.querySelectorAll('.bookmark-card, .ai-card').forEach(function(el) { obs.observe(el); });
   }
 
   function observeSections() {
     var obs = new IntersectionObserver(function(entries) {
       entries.forEach(function(e) { if (e.isIntersecting) { e.target.style.opacity = '1'; e.target.style.transform = 'translateY(0)'; } });
     }, { threshold: 0.05 });
-    mainContent.querySelectorAll('.cat-section').forEach(function(el) {
+    mainContent.querySelectorAll('.cat-section, .ai-column').forEach(function(el) {
       el.style.opacity = '0';
       el.style.transform = 'translateY(30px)';
       el.style.transition = 'all 0.6s cubic-bezier(0.4,0,0.2,1)';
