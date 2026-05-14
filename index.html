@@ -6,242 +6,199 @@
 <title>贝塔导航</title>
 <style>
   :root {
-    --text: #1d1d1f;
-    --text-secondary: #666;
-    --text-tertiary: #999;
     --bg: #ffffff;
-    --card-bg: #ffffff;
+    --text: #1d1d1f;
+    --text-secondary: #6e6e73;
+    --text-tertiary: #aeaeb2;
     --border: rgba(0,0,0,0.06);
+    --shadow: 0 1px 2px rgba(0,0,0,0.04);
+    --shadow-hover: 0 4px 12px rgba(0,0,0,0.08);
+    --tag-bg: #f5f5f7;
     --blue: #0071e3;
-    --radius: 8px;
-    --transition: 0.35s ease;
+    --radius: 10px;
+    --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
-
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+  * { margin:0; padding:0; box-sizing:border-box; }
   body {
-    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "PingFang SC", "Microsoft YaHei", sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "PingFang SC", "Helvetica Neue", sans-serif;
     background: var(--bg);
     color: var(--text);
     -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+    line-height: 1.4;
     overflow-x: hidden;
   }
-  a { text-decoration: none; color: inherit; }
+  a { text-decoration:none; color:inherit; }
 
-  /* ─── Nav ─── */
   .nav {
-    position: fixed; top: 0; width: 100%; z-index: 100;
-    height: 48px;
+    position:fixed; top:0; width:100%; z-index:100;
+    height:48px;
     background: rgba(29,29,31,0.95);
     backdrop-filter: saturate(180%) blur(20px);
-    display: flex; align-items: center;
-    padding: 0 36px;
+    display:flex; align-items:center;
+    padding:0 40px;
   }
   .nav-inner {
-    display: flex; align-items: center; justify-content: space-between;
-    width: 100%;
+    display:flex; align-items:center; justify-content:space-between; width:100%;
   }
-  .nav-logo { font-size: 17px; font-weight: 600; color: #fff; display: flex; align-items: center; gap: 8px; }
-  .nav-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--blue); }
-  .nav-search {
-    display: flex; align-items: center; gap: 6px;
-    background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 50px; padding: 4px 14px; width: 220px; transition: all var(--transition);
+  .nav-logo { display:flex; align-items:center; gap:8px; font-size:17px; font-weight:600; color:#fff; }
+  .nav-dot { width:6px; height:6px; border-radius:50%; background:var(--blue); }
+  .nav-srch {
+    display:flex; align-items:center; gap:6px;
+    background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.08);
+    border-radius:8px; padding:4px 12px; width:220px; transition:all var(--transition);
   }
-  .nav-search:focus-within { background: rgba(255,255,255,0.18); box-shadow: 0 0 0 3px rgba(0,113,227,0.25); }
-  .nav-search input {
-    flex: 1; background: none; border: none; color: #fff; font-size: 13px;
-    padding: 5px 0; outline: none; font-family: inherit; caret-color: var(--blue);
+  .nav-srch:focus-within { background:rgba(255,255,255,0.16); border-color:var(--blue); }
+  .nav-srch svg { color:rgba(255,255,255,0.4); flex-shrink:0; width:14px; height:14px; }
+  .nav-srch input {
+    flex:1; background:none; border:none; color:#fff; font-size:13px;
+    padding:5px 0; outline:none; font-family:inherit; caret-color:var(--blue);
   }
-  .nav-search input::placeholder { color: rgba(255,255,255,0.4); }
-  .nav-search svg { color: rgba(255,255,255,0.4); flex-shrink: 0; width: 14px; height: 14px; }
+  .nav-srch input::placeholder { color:rgba(255,255,255,0.4); }
 
-  /* ─── Category Tabs ─── */
   .cat-bar {
-    position: sticky; top: 48px; z-index: 50;
-    background: #f8f8f8; border-bottom: 1px solid #eee;
+    position:sticky; top:48px; z-index:50;
+    height:50px;
+    background:rgba(255,255,255,0.85);
+    backdrop-filter:saturate(180%) blur(20px);
+    border-bottom:1px solid var(--border);
+    display:flex; align-items:center;
+    padding:0 40px;
+    overflow-x:auto;
+    -webkit-overflow-scrolling:touch;
   }
-  .cat-bar-inner {
-    display: flex; gap: 0; padding: 0 36px;
-    overflow-x: auto; scroll-behavior: smooth;
-    -webkit-overflow-scrolling: touch;
-  }
-  .cat-bar-inner::-webkit-scrollbar { height: 0; }
+  .cat-bar::-webkit-scrollbar { height:0; }
   .cat-tab {
-    padding: 13px 18px; font-size: 13px; font-weight: 400;
-    color: var(--text-secondary); white-space: nowrap; cursor: pointer;
-    transition: all var(--transition); border-bottom: 2px solid transparent;
-    background: none; border-top: none; border-left: none; border-right: none; font-family: inherit;
+    flex-shrink:0;
+    padding:14px 16px; font-size:13px; font-weight:400;
+    color:var(--text-secondary); cursor:pointer;
+    transition:color var(--transition);
+    border-bottom:2px solid transparent;
   }
-  .cat-tab:hover { color: var(--text); }
-  .cat-tab.active { color: var(--text); font-weight: 600; border-bottom-color: var(--text); }
+  .cat-tab:hover { color:var(--text); }
+  .cat-tab.active { color:var(--text); font-weight:600; border-bottom-color:var(--text); }
 
-  /* ─── Content ─── */
-  .main-wrap {
-    padding: 28px 36px 60px;
-    max-width: 1500px; margin: 0 auto;
+  .side {
+    position:fixed; right:0; top:50%; transform:translateY(-50%); z-index:30;
   }
+  .side a {
+    display:flex; align-items:center; justify-content:flex-end; gap:6px;
+    width:46px; height:38px;
+    background:rgba(255,255,255,0.85); backdrop-filter:blur(12px);
+    border:1px solid var(--border); border-right:none; border-radius:6px 0 0 6px;
+    margin-bottom:2px;
+    font-size:12px; color:var(--text-secondary); cursor:pointer;
+    transition:all 0.2s; overflow:hidden;
+    padding-right:10px;
+  }
+  .side a:hover { width:90px; background:#fff; color:var(--text); }
+  .side .s-icon { font-size:16px; flex-shrink:0; }
+  .side .s-label { white-space:nowrap; display:none; }
+  .side a:hover .s-label { display:inline; }
 
-  /* ─── Section ─── */
-  .cat-section {
-    margin-bottom: 48px;
-    scroll-margin-top: 120px;
-  }
-  .sec-title {
-    display: flex; align-items: center; gap: 10px;
-    padding: 10px 0; margin-bottom: 14px;
-    border-bottom: 1px solid #eee;
-  }
-  .sec-title .emoji { font-size: 22px; }
-  .sec-title h3 { font-size: 18px; font-weight: 700; }
-  .sec-title .desc { font-size: 12px; color: var(--text-secondary); margin-left: 4px; }
+  .main-wrap { padding:60px 40px 80px; }
 
-  /* ─── Grid ─── */
+  .hero { text-align:center; padding:40px 0 32px; }
+  .hero h1 { font-size:36px; font-weight:700; letter-spacing:-0.5px; }
+  .hero h1 em { font-style:normal; color:var(--blue); }
+  .hero .sub { font-size:15px; color:var(--text-secondary); margin-top:8px; margin-bottom:24px; }
+  .hero-stats { display:flex; justify-content:center; gap:48px; }
+  .hero-stat { text-align:center; }
+  .hero-stat .n { font-size:28px; font-weight:700; color:var(--text); }
+  .hero-stat .l { font-size:12px; color:var(--text-tertiary); margin-top:2px; }
+
+  .cat-sect { margin-bottom:48px; scroll-margin-top:110px; }
+
+  .sec-hd {
+    display:flex; align-items:center; gap:8px;
+    margin-bottom:16px; padding-bottom:10px;
+    border-bottom:1px solid var(--border);
+  }
+  .sec-hd h2 { font-size:18px; font-weight:600; }
+  .sec-hd span { font-size:12px; color:var(--text-tertiary); margin-left:4px; }
+
   .bookmark-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(165px, 1fr));
-    gap: 14px;
-    margin-bottom: 10px;
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(160px, 1fr));
+    gap:10px;
   }
-  @media (max-width: 640px) { .bookmark-grid { grid-template-columns: repeat(3, 1fr); gap: 10px; } }
-  @media (max-width: 420px) { .bookmark-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width:640px) { .bookmark-grid { grid-template-columns:repeat(3,1fr); gap:8px; } }
+  @media (max-width:420px) { .bookmark-grid { grid-template-columns:repeat(2,1fr); } }
 
-  /* ─── Card ─── */
   .tool { }
-
-  .tool-head { display: block; }
+  .tool-head { display:block; }
   .tool-img {
-    height: 106px;
-    border-radius: 6px;
-    display: flex; align-items: center; justify-content: center;
-    position: relative; overflow: hidden;
-    transition: all 0.4s;
-    margin-bottom: 8px;
-  }
-  .tool-letter {
-    font-size: 34px; font-weight: 700;
-    background: rgba(255,255,255,0.9);
-    border-radius: 8px;
-    width: 56px; height: 56px;
-    display: flex; align-items: center; justify-content: center;
-    transition: all 0.4s;
-  }
-  .tool-letter img { width:52px; height:52px; border-radius:6px; display:block; }
-  .tool-img:hover .tool-letter {
-    transform: scale(1.12) rotate(8deg);
+    height:90px; border-radius:8px;
+    display:flex; align-items:center; justify-content:center;
+    margin-bottom:8px;
+    transition:all var(--transition);
   }
   .tool-img:hover {
-    box-shadow: 0 24px 28px -16px rgba(0,0,0,0.26);
-    transform: translateY(-4px);
+    box-shadow:0 10px 20px -12px rgba(0,0,0,0.2);
+    transform:translateY(-2px);
   }
-.tool-title {
-    font-size: 14px; font-weight: 700; color: #1d1d1f;
-    line-height: 1.3; margin-bottom: 2px;
-    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  .tool-img .tl {
+    font-size:28px; font-weight:600;
+    background:rgba(255,255,255,0.9); border-radius:6px;
+    width:48px; height:48px;
+    display:flex; align-items:center; justify-content:center;
+    color:#333;
+    transition:all var(--transition);
+  }
+  .tool-img:hover .tl { transform:scale(1.08); }
+
+  .tool-title {
+    font-size:12px; font-weight:600; line-height:1.35;
+    overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+    margin-bottom:2px;
   }
   .tool-body {
-    font-size: 12px; color: var(--text-secondary);
-    line-height: 1.35;
-    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    font-size:11px; color:var(--text-tertiary);
+    overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
   }
 
-  /* ─── AI Column ─── */
-  .ai-col { margin-bottom: 40px; }
-  .ai-col-head {
-    display: flex; align-items: center; gap: 10px;
-    padding: 10px 0; margin-bottom: 14px;
-    border-bottom: 1px solid #eee;
+  .ai-col { margin-bottom:48px; }
+  .ai-col-hd {
+    display:flex; align-items:center; gap:8px;
+    margin-bottom:16px; padding-bottom:10px;
+    border-bottom:1px solid var(--border);
   }
-  .ai-col-head .emoji { font-size: 22px; }
-  .ai-col-head h3 { font-size: 18px; font-weight: 700; }
+  .ai-col-hd h2 { font-size:18px; font-weight:600; }
   .ai-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-    gap: 14px;
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(220px,1fr));
+    gap:10px;
   }
   .ai-card {
-    background: #f8f8f8;
-    border-radius: 8px;
-    padding: 18px 20px;
-    transition: all 0.3s;
+    background:#f5f5f7; border-radius:8px;
+    padding:16px 16px; transition:background var(--transition);
   }
-  .ai-card:hover { background: #f0f0f0; }
-  .ai-card-head { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
-  .ai-card-icon { font-size: 20px; }
-  .ai-card-head h4 { font-size: 14px; font-weight: 600; }
-  .ai-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .ai-card:hover { background:#eee; }
+  .ai-card-hd { display:flex; align-items:center; gap:8px; margin-bottom:8px; }
+  .ai-card-hd h4 { font-size:13px; font-weight:600; }
+  .ai-tags { display:flex; flex-wrap:wrap; gap:4px; }
   .ai-tag {
-    font-size: 12px; color: var(--text-secondary);
-    background: rgba(0,0,0,0.04);
-    padding: 4px 10px; border-radius: 5px;
-    transition: all 0.2s; text-decoration: none; display: inline-block;
+    font-size:11px; color:var(--text-secondary);
+    background:rgba(255,255,255,0.8); border-radius:4px;
+    padding:3px 8px; transition:all var(--transition);
   }
-  .ai-tag:hover { background: var(--blue); color: #fff; }
+  .ai-tag:hover { background:var(--blue); color:#fff; }
 
-  /* ─── Right Sidebar ─── */
-  .side {
-    position: fixed; right: 0; top: 50%; transform: translateY(-50%);
-    z-index: 30;
-  }
-  .side ul { list-style: none; }
-  .side li {
-    width: 40px; height: 40px;
-    margin-bottom: 2px; position: relative;
-  }
-  .side .sidebox {
-    position: absolute; right: 0; top: 0;
-    width: 50px; height: 40px;
-    border-radius: 6px 0 0 6px;
-    background: rgba(255,255,255,0.85);
-    backdrop-filter: blur(12px);
-    border: 1px solid var(--border);
-    border-right: none;
-    display: flex; align-items: center; justify-content: center;
-    gap: 4px;
-    color: var(--text-secondary); font-size: 12px;
-    cursor: pointer;
-    transition: all 0.2s;
-    overflow: hidden;
-    text-decoration: none;
-  }
-  .side .sidebox:hover {
-    width: 90px;
-    background: #fff;
-    color: var(--text);
-  }
-  .side .sidebox .s-icon { font-size: 18px; flex-shrink: 0; }
-  .side .sidebox .s-label { white-space: nowrap; display: none; }
-  .side .sidebox:hover .s-label { display: inline; }
+  .search-hd { text-align:center; padding:20px 0 24px; }
+  .search-hd h2 { font-size:20px; font-weight:600; }
+  .search-hd .q { color:var(--blue); }
+  .search-hd p { font-size:13px; color:var(--text-secondary); }
+  .empty { text-align:center; padding:80px 0; color:var(--text-tertiary); }
+  .empty .ei { font-size:40px; margin-bottom:12px; opacity:0.3; }
+  footer { text-align:center; padding:24px; color:var(--text-tertiary); font-size:11px; border-top:1px solid var(--border); }
 
-  /* ─── Hero ─── */
-  .hero { text-align: center; padding: 40px 0 36px; }
-  .hero h1 { font-size: 38px; font-weight: 700; letter-spacing: -1px; margin-bottom: 8px; }
-  .hero h1 em { font-style: normal; background: linear-gradient(135deg,#0071e3,#5e5ce6,#ac39ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-  .hero .sub { font-size: 16px; color: var(--text-secondary); margin-bottom: 20px; }
-  .hero-stats { display: flex; justify-content: center; gap: 40px; }
-  .hero-stat { text-align: center; }
-  .hero-stat .n { font-size: 28px; font-weight: 700; background: linear-gradient(135deg,#0071e3,#5e5ce6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-  .hero-stat .l { font-size: 12px; color: var(--text-secondary); }
-
-  /* ─── Footer ─── */
-  footer { text-align: center; padding: 24px; color: var(--text-tertiary); font-size: 11px; border-top: 1px solid #eee; }
-
-  /* ─── Search ─── */
-  .search-head { text-align: center; padding: 24px 0 28px; }
-  .search-head h2 { font-size: 20px; font-weight: 700; }
-  .search-head .q { color: var(--blue); }
-  .search-head p { color: var(--text-secondary); font-size: 14px; }
-  .empty-state { text-align: center; padding: 80px 0; color: var(--text-secondary); }
-  .empty-state .ei { font-size: 48px; margin-bottom: 12px; opacity: 0.2; }
-
-  @media (max-width: 768px) {
-    .nav { padding: 0 16px; height: 44px; }
-    .nav-search { width: 160px; }
-    .cat-bar-inner { padding: 0 12px; }
-    .main-wrap { padding: 16px 12px 40px; }
-    .hero h1 { font-size: 26px; }
-    .hero-stats { gap: 24px; }
-    .side { display: none; }
+  @media (max-width:768px) {
+    .nav { padding:0 16px; }
+    .nav-srch { width:160px; }
+    .cat-bar { padding:0 12px; }
+    .main-wrap { padding:40px 16px 60px; }
+    .hero h1 { font-size:26px; }
+    .hero-stats { gap:24px; }
+    .side { display:none; }
   }
 </style>
 </head>
@@ -250,34 +207,29 @@
 <nav class="nav">
   <div class="nav-inner">
     <div class="nav-logo"><span class="nav-dot"></span>贝塔导航</div>
-    <div class="nav-search">
+    <div class="nav-srch">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
       <input type="text" id="searchInput" placeholder="搜索" autocomplete="off">
     </div>
   </div>
 </nav>
 
-<div class="cat-bar" id="catBar">
-  <div class="cat-bar-inner" id="catBarInner"></div>
-</div>
+<div class="cat-bar" id="catBar"></div>
 
-<div class="side" id="side">
-  <ul id="sideList"></ul>
-</div>
+<div class="side" id="side"><div id="sideList"></div></div>
 
 <main class="main-wrap" id="mainContent"></main>
-
-<footer>Copyright &copy; 2026 贝塔导航</footer>
+<footer>贝塔导航</footer>
 
 <script>
 var BOOKMARK_DATA = [{"name": "AI绘画生成", "emoji": "🎨", "description": "AI 图像生成与绘画工具", "groups": [{"name": "AI绘画生成", "icon": "🎨", "subgroups": [{"name": "AI绘画生成", "icon": "🎨", "children": [{"name": "AI电商设计_电商主图头图一键生成_电商模板在线设计_电商素材免费下载-美间AI创意商拍", "href": "https://www.meijian.com/e-commerce?utm_source=dskolqxcpa"}, {"name": "eSheep(内测中) - 一站式的AIGC社区", "href": "https://www.esheep.com/?channel=zz&from=1307"}, {"name": "NovelAI.Dev秋叶大神", "href": "https://novelai.dev/"}, {"name": "MewXAI - AI绘画创作平台", "href": "https://www.mewx.art/"}, {"name": "触手AI-AI图片生成工具产品-免费AI智能绘画生成在线平台", "href": "https://douchu.ai/warehouse/styleStore?inviteCode=199593&channel=channel_invite"}, {"name": "炼丹阁", "href": "https://models.paomiantv.cn/models/Detail?id=5280&modelVersionId=6123"}, {"name": "OPS 提示词工作室 | 可视化编辑提示词 | 一键翻译 AIGC 提示词 | Midjourney 提示词 | OpenPromptStudio made by Moonvy 月维", "href": "https://moonvy.com/apps/ops/"}, {"name": "AIGODLIKE社区", "href": "https://www.aigodlike.com/"}, {"name": "Danbooru 标签超市", "href": "https://tags.novelai.dev/"}, {"name": "AI生成图片-图片AI生成器-改图鸭", "href": "https://www.gaituya.com/aiimg/?hfzhsxh230410-589272521"}, {"name": "Leonardo.ai", "href": "https://leonardo.ai/"}, {"name": "Tiamat", "href": "https://www.tiamat.world/"}, {"name": "幻火AI艺术 - 人工智能艺术创作平台", "href": "https://app.huanhuo.com/r/ufje5u"}, {"name": "微软设计", "href": "https://designer.microsoft.com/"}, {"name": "画宇宙 - 人工智能 AI 作画网站", "href": "https://creator.nolibox.com/"}, {"name": "意间AI绘画", "href": "http://m.yjai.art/"}, {"name": "无界AI-人人都是艺术家", "href": "https://www.wujieai.com/"}, {"name": "JourneyDraw", "href": "chrome-extension://ibjblcdapcopjhoknnajdnfbccfdfbnh/popup.html"}, {"name": "LiblibAI•哩布哩布AI-中国领先原创AI模型分享社区", "href": "https://www.liblibai.com/#/"}, {"name": "吐司 Tusi.Art | 可在线生图的 AI 模型分享社区，还是免费的！", "href": "https://tusi.art/"}, {"name": "LiblibAI·哩布哩布AI-中国领先原创AI模型分享社区", "href": "https://www.liblibai.com/"}, {"name": "即时 AI - 生成式设计工具", "href": "https://js.design/ai-muses/create?source=mp&plan=cxai"}, {"name": "AI-ACG绘画网站，您的完全免费的AI绘画网站", "href": "https://ai-acg.com/"}, {"name": "炼丹家AI - 超多免费额度，AI对话超强模型、AI绘画精美创作，在线极速体验", "href": "https://www.liandanjia.com/app/chat/list"}, {"name": "免费AI数字人分身|数字克隆人-T9数字人", "href": "https://t-9.cn/"}, {"name": "讯飞智作- AI虚拟主播-虚拟数字人视频制作-文字转语音-语音合成配音网站", "href": "https://www.xfzhizuo.cn/"}, {"name": "模型广场 -", "href": "https://aigccafe.net/"}, {"name": "奇域 - 创作", "href": "https://www.qiyuai.net/"}, {"name": "A1.art - Everyone&#39;s art station", "href": "https://a1.art/"}, {"name": "Dreamina - 用简单的文案，创作精彩的图片和视频", "href": "https://dreamina.jianying.com/ai-tool/home?darkschemeovr=1"}, {"name": "LiblibAI·哩布哩布AI - 中国领先的AI创作平台", "href": "https://www.liblib.art/"}, {"name": "LiblibAI·哩布哩布AI - 中国领先的AI创作平台", "href": "https://www.liblib.art/modelinfo/051f70f0b588448cb88dc9d6a49f1559?from=feed"}, {"name": "Raphael AI - 免费无限制 AI 图像生成器", "href": "https://raphael.app/zh"}, {"name": "EasyControl Ghibli - 一个由 jamesliu1217 创建的 Hugging Face 空间 --- EasyControl Ghibli - a Hugging Face Space by jamesliu1217", "href": "https://huggingface.co/spaces/jamesliu1217/EasyControl_Ghibli"}, {"name": "可灵 AI - 新一代 AI 创意生产力平台", "href": "https://app.klingai.com/cn/membership/membership-plan"}, {"name": "星流 - 新一代AI创作工具", "href": "https://www.xingliu.art/"}, {"name": "椒图AI - 中文修图，就用椒图！", "href": "https://www.jiaotuai.cn/"}, {"name": "OpenRouter", "href": "https://openrouter.ai/chat?models=google/gemini-2.5-pro"}, {"name": "LMArena", "href": "https://lmarena.ai/"}, {"name": "Lovart | 全球首个设计智能体", "href": "https://www.lovart.ai/zh/home"}]}]}]}, {"name": "AI工具与智能助手", "emoji": "🤖", "description": "ChatGPT、AI 对话、AI 编程", "groups": [{"name": "AI工具与智能助手", "icon": "🤖", "subgroups": [{"name": "AI工具与智能助手", "icon": "🤖", "children": [{"name": "阶跃AI", "href": "https://www.stepfun.com/chats/new"}, {"name": "呜哩AI，一站式AIGC创意平台", "href": "https://wuli.art/generate"}, {"name": "人工智能教育", "href": "https://aigcfun.com/"}, {"name": "查特", "href": "https://freegpt.one/"}, {"name": "ChatGPT API Demo", "href": "https://chatgpt.ddiu.me/"}, {"name": "仅用于开发学习交流", "href": "https://chat.binjie.site:7777/#/chat/1677847264643"}, {"name": "人工智能教育", "href": "https://chat.forchange.cn/"}, {"name": "TDChat_ChatGPT免登录账号版_土豆Chat_AI助手_AI绘图_基于OpenAI API实现", "href": "http://www.tdchat.de/"}, {"name": "川湖聊天GPT - 一个拥抱的脸空间 by 约翰史密斯9982", "href": "https://huggingface.co/spaces/JohnSmith9982/ChuanhuChatGPT?duplicate=true"}, {"name": "https://b.jimmylv.cn", "href": "https://b.jimmylv.cn/"}, {"name": "Poe - Sage", "href": "https://poe.com/"}, {"name": "ChatGPT", "href": "https://chat.openai.run/"}, {"name": "免费的ChatGPT镜像网站 | 西园公子的科研百宝箱", "href": "https://study.zwjjiaozhu.top/posts/chatgpt-mirror-sites.html"}, {"name": "排版科学空间 |发现", "href": "https://typeset.io/discover/"}, {"name": "https://nat.dev/compare", "href": "https://nat.dev/compare"}, {"name": "Midjourney", "href": "https://www.midjourney.com/home/?callbackUrl=%2Fapp%2F"}, {"name": "BAI Chat", "href": "https://chatbot.theb.ai/#/chat/1002"}, {"name": "6pen Art", "href": "https://6pen.art/dashboard"}, {"name": "法学硕士实验室", "href": "https://builtbyjesse.com/lab"}, {"name": "The AI Search Engine You Control | AI Chat &amp; Apps", "href": "https://you.com/"}, {"name": "AI帮个忙 | 多功能AI小帮手", "href": "https://aitools.run/"}, {"name": "ChatGPT", "href": "http://ai.usesless.com/scene"}, {"name": "个人在线办公室", "href": "https://personal.onlyoffice.com/zh"}, {"name": "TDChat入口地址发布页，收藏我回家不迷路！", "href": "http://www.tdchat.im/"}, {"name": "ChatGPT成品号/OpenAI成品号", "href": "https://pay.cveoy.com/#/"}, {"name": "通义千问", "href": "https://tongyi.aliyun.com/?accounttraceid=6d7b9a1e5b714fe99e6f8acc673928ecqiof"}, {"name": "ChatMind AI", "href": "https://chatmindai.cn/#/chat/1002"}, {"name": "ChatMind.Tech", "href": "https://www.chatmind.tech/"}, {"name": "公告 | 智造喵", "href": "https://chat.plexpt.com/notice/4"}, {"name": "Aski - 高效AI绘画服务，支持多种AI模型", "href": "https://askiweb.com/"}, {"name": "模型下载社区", "href": "https://civitai.com/"}, {"name": "自媒体家园 | 专业自媒体导航，专注自媒体人效率、资源、技能提升！", "href": "https://www.zmthome.com/#term-2661"}, {"name": "爱作画", "href": "https://aizuohua.com/?ref=www.extnav.com#/aicz"}, {"name": "一起用AI | AI副业搞钱套路集合站点", "href": "https://17yongai.com/"}, {"name": "AI工具箱 | AI工具资源一站式聚合网站", "href": "https://ai-kit.cn/"}, {"name": "WaytoAGI-通往AGI之路，最好的 AI 知识库和工具站", "href": "https://www.waytoagi.com/"}, {"name": "Luvvoice: 免费在线文字转语音，无字数限制", "href": "https://luvvoice.com/zh"}, {"name": "ChatTTS - 免费在线使用文字转语音", "href": "https://www.chattts.co/zh#free"}, {"name": "下载您的文件 — Convertio", "href": "https://convertio.co/zh/download/9f2065dfa353b11121e1b9ab71bb3dda9a2967/"}, {"name": "flowith 2.0 - Your AI Creation Workspace, with Knowledge", "href": "https://flowith.io/blank"}, {"name": "AskManyAI", "href": "https://askmanyai.cn/index"}, {"name": "天工AI - 聊天写作对话的全能AI助手，搜索更深度，阅读更多彩", "href": "https://www.tiangong.cn/"}, {"name": "Qwen", "href": "https://chat.qwenlm.ai/"}, {"name": "智谱清言", "href": "https://chatglm.cn/main/toolsCenter"}, {"name": "文档工具-30tool", "href": "https://www.30aitool.com/gongju/%E6%96%87%E6%A1%A3%E7%B1%BB"}, {"name": "Spaces - Hugging Face", "href": "https://huggingface.co/spaces"}, {"name": "AI绘画宝典 - 飞书云文档", "href": "https://i1etb6xynr.feishu.cn/wiki/Rd9GwrHnSiJGCIkaBHLcikegnXd"}, {"name": "AI工具集 | 700+ AI工具集合官网，国内外AI工具集导航大全", "href": "https://ai-bot.cn/"}, {"name": "Kimi.ai - 帮你看更大的世界", "href": "https://kimi.moonshot.cn/"}, {"name": "国内外1400+AI工具集合 - AIHub |AI导航", "href": "https://www.aihub.cn/tools/?archiveSearch=&darkschemeovr=1"}, {"name": "SparkAi-官方站点", "href": "https://ai.sparkaigf.com/chat"}, {"name": "腾讯元宝", "href": "https://yuanbao.tencent.com/chat/gtcnTp5C1G"}, {"name": "腾讯混元", "href": "https://hunyuan.tencent.com/?ref=openi.cn"}, {"name": "跃问", "href": "https://yuewen.cn/chats/new"}, {"name": "免费在线视频解析下载网站 - Parsevideo.com", "href": "https://pv.vlogdownloader.com/"}, {"name": "短视频批量去水印、作者主页批量提取、YouTube微博美拍TikTok视频等一键批量下载 - 批量解析下载", "href": "https://jiexixi.su27.net/batch/all"}, {"name": "《FlowPix：以提示词激发创意，靠工作流开启未来》", "href": "https://www.flowpix.club/"}, {"name": "免费在线学！刺猬星球super-i_AI教程全解析", "href": "https://www.super-i.cn/tool.html"}, {"name": "一键安装澳龙AutoClaw：飞书集成AI助手速来下载", "href": "https://autoglm.zhipuai.cn/autoclaw/"}, {"name": "LibTV - 专业视频创作工具", "href": "https://www.liblib.tv/?sourceid=020483&from_bcg=bcg_11_1339781032&track_id=pbaes.X1S7lCoc7EcsOtUvVmWOceOthES3cwDfwyHzxHOKPbKZI5XJl2p4NUAW7AE8UT6PUuq5tVikhgnwqWVi-Khn5GawBixvhxrf1xntAA75rx2sIDblH0jb2YFcHrnnhujvZMJttxhI_efOGsLXGlXBPJvpFdqa6Gy1b3KLPvM1V9xkH4DRkor1VQ_BEgxgffD1&caid=__CAID__&resource_id=__RESOURCEID__&source_id=5614&from_spmid=__FROMSPMID__&request_id=1775239427172q10a85a168a104q1020&creative_id=1339781032&linked_creative_id=1357020570"}, {"name": "Prompts - AI Testers", "href": "https://www.aitesters.org/t/prompts"}, {"name": "FlowGPT: Amplify your workflow with best prompts", "href": "https://flowgpt.com/"}, {"name": "ChatGPT 指令大全", "href": "https://www.explainthis.io/zh-hans/chatgpt"}, {"name": "ChatGPT Shortcut - 简单易用的 ChatGPT 快捷指令表，让生产力倍增！标签筛选、关键词搜索和一键复制 Prompts | Tag filtering, keyword search, and one-click copy prompts", "href": "https://www.aishort.top/"}, {"name": "Midjourney 魔法咒语-美叶", "href": "https://www.meiye.art/midjourney"}, {"name": "What is the Vercel AI Playground?", "href": "https://play.vercel.ai/r/mWjP5Dt"}, {"name": "Forefront: Powerful Language Models A Click Away", "href": "https://www.forefront.ai/"}, {"name": "Forefront Chat", "href": "https://chat.forefront.ai/"}, {"name": "GPT4 | ora.sh", "href": "https://ora.sh/openai/gpt4"}, {"name": "ChatGPT", "href": "https://chat.chatbot.sex/chat/"}, {"name": "mst.ai", "href": "https://mst.ai/tools/chat"}, {"name": "CatGPT", "href": "https://www.cat-gpt.com/chat"}, {"name": "讯飞星火认知大模型", "href": "https://xinghuo.xfyun.cn/desk"}, {"name": "Chatgpt在线网页版-永久免费使用！", "href": "https://chatgpt.qdymys.cn/#/chat/1002"}, {"name": "独角兽分享: 每日更新的免费ChatGPT账号,免费OpenAIkey", "href": "https://djsfenxiang.com/"}, {"name": "Chato - 基于AI技术 轻松创建对话机器人", "href": "https://chato.cn/"}, {"name": "Claude", "href": "https://claude.ai/chat/01c05b12-ac2a-4186-bdc9-3db4610a1b0e"}, {"name": "员工定制小冰", "href": "https://aibeings-vip-h5.xiaoice.com/home/custom?type=video"}, {"name": "不少Ai", "href": "https://chat.bushao.info/chat"}, {"name": "首页 - AI-Box国内AI镜像导航网", "href": "https://ai-box.cn/#/guide/index"}, {"name": "Copilot微软gpt4", "href": "https://copilot.microsoft.com/"}, {"name": "文心一言", "href": "https://yiyan.baidu.com/"}, {"name": "AI指南官网 | AI导航,AI软件,AI工具,AI工具大全 - 全网最有用的 AI 导航", "href": "https://www.aizhinan.cn/"}, {"name": "阿水AI6.0", "href": "https://ai.xiabb.chat/home"}, {"name": "Bard", "href": "https://bard.google.com/chat/062ef1fd317fee69"}, {"name": "Explore - Coze", "href": "https://www.coze.com/explore"}, {"name": "Gnomic-智能体平台", "href": "https://www.gnomic.cn/agentCenter/index"}, {"name": "配备 GPT-4 的必应聊天", "href": "https://xx1.laogou666.com/web/?showconv=1#/"}]}]}]}, {"name": "设计与创意资源", "emoji": "🖼️", "description": "图标、字体、图库、设计灵感", "groups": [{"name": "设计与创意资源", "icon": "🖼️", "subgroups": [{"name": "设计与创意资源", "icon": "🖼️", "children": [{"name": "Animated Icons – Color", "href": "https://icons8.com/animated-icons/color"}, {"name": "Mockup World | The best free Mockups from the Web", "href": "https://www.mockupworld.co/"}, {"name": "搜UI-中国UI设计素材_UI设计图片下载_UI模板资源交易网站", "href": "http://www.sooui.com/"}, {"name": "PDF转Word | 免费在线PDF转Word | PDF转Word转换器 | PDF转化速度快 | 首页", "href": "https://www.alltoall.net/"}, {"name": "微信公众号排版|平面|其他平面|铖丶 - 原创作品 - 站酷 (ZCOOL)", "href": "https://www.zcool.com.cn/work/ZNDA5NTQ4MDA=.html"}, {"name": "和“酒店”有关的emoji - Emoji大全", "href": "https://www.emojidaquan.com/Common/search?emoji=%E9%85%92%E5%BA%97"}, {"name": "ByteDance IconPark", "href": "https://iconpark.oceanengine.com/home"}, {"name": "背景", "href": "https://gradienta.io/"}, {"name": "3D", "href": "https://icons8.com/"}, {"name": "动效", "href": "https://lottiefiles.com/"}, {"name": "设计导航", "href": "http://16map.com/"}, {"name": "包小盒 - 在线3D包装设计工具_包装设计_印刷定制_渲染效果", "href": "https://www.baoxiaohe.com/"}, {"name": "美叶-为设计师提供有价值的设计参考", "href": "https://www.meiye.art/"}, {"name": "即时设计 - 可实时协作的专业 UI 设计工具", "href": "https://js.design/home"}, {"name": "堆友—3D在线编辑器，0门槛堆出无限创意，免费下载，免费使用", "href": "https://d.design/"}, {"name": "古田路9号-品牌创意-版权保护平台", "href": "https://www.gtn9.com/index.aspx"}, {"name": "简笔画生成", "href": "https://cvbox.org/post/notion-avatar-color/"}, {"name": "字体天下-提供各类字体的免费下载和在线预览服务", "href": "https://www.fonts.net.cn/"}, {"name": "模版展示-阿里云模板库网站模板", "href": "https://aliyun.wezhan.cn/home"}, {"name": "TapNow｜广告、电影与创意叙事的AI视觉创作引擎", "href": "https://app.tapnow.ai/home"}, {"name": "素材国度_设计素材共享平台 www.dc10000.com", "href": "https://www.dc10000.com/"}, {"name": "超过 60 张关于“油菜花”和“春天”的免费图片 - Pixabay", "href": "https://pixabay.com/zh/images/search/%E6%B2%B9%E8%8F%9C%E8%8A%B1/"}, {"name": "潼南 的视频 | 天空之城", "href": "https://www.skypixel.com/search/videos?q=%E6%BD%BC%E5%8D%97"}, {"name": "沙沙野-让作品遇见全世界", "href": "https://www.ssyer.com/cate"}, {"name": "POCO摄影图片社区 - 领先的时尚摄影平台，摄影视频，摄影爱好者分享作品和技巧首选，个人空间", "href": "https://www.poco.cn/"}, {"name": "热门九黎城摄影作品 - 优秀九黎城摄影作品欣赏 - 500px摄影社区", "href": "https://500px.com.cn/community/search?key=%E4%B9%9D%E9%BB%8E%E5%9F%8E&searchtype=photos"}, {"name": "Open Doodles - Free sketchy illustrations", "href": "https://opendoodles.com/"}, {"name": "免费素材照片 · Pexels", "href": "https://www.pexels.com/zh-cn/"}, {"name": "PNG images with transparent background | Free PNG images clipart", "href": "http://pngimg.com/"}, {"name": "完美对称无缝平铺背景图底纹素材 - 图鱼", "href": "https://www.hituyu.com/"}, {"name": "重庆视频素材_重庆视频模板下载-摄图网视频库", "href": "http://699pic.com/media/video-81012.html"}, {"name": "8KRAW - 正版视频素材库", "href": "http://www.8kraw.com/"}, {"name": "免费透明PNG图片，贴纸和无背景剪贴画-StickPNG", "href": "https://www.stickpng.com/"}, {"name": "送图网 送图网官方网站 免费设计素材PSD下载 - 给图网", "href": "http://songtu.wang/portal.php"}, {"name": "免费矢量插图以提升您的设计格调 | Icons8 插图", "href": "https://icons8.cn/illustrations"}, {"name": "Mixkit-下一个视频项目的超棒免费资产", "href": "https://mixkit.co/"}, {"name": "京东版权素材中心 - 中国正版商业图片素材交易平台", "href": "https://sucai.jd.com/"}, {"name": "大作首页", "href": "https://www.bigbigwork.com/home"}, {"name": "影视飓风", "href": "https://www.ysjf.com/index"}, {"name": "大兔", "href": "https://rabbit.bigbigwork.com/tupian?kw=%E5%B0%81%E9%9D%A2&copyright=1"}, {"name": "免费正版高清视频素材库 数千部优质视频素材可供免费使用和下载 - Pixabay", "href": "https://pixabay.com/zh/videos/"}, {"name": "阿里云正版图片-商业图片素材库-专业图片交易网站", "href": "https://pic.aliyun.com/?utm_source=bigezhang.com"}, {"name": "GOTOVLOG.COM - 你的视频创作指南", "href": "https://www.gotovlog.com/"}, {"name": "我有素材网-我有素材网专注于实拍视频素材绿幕素材LED背景视频素材分享", "href": "https://www.woyousucai.com/"}, {"name": "【原创】插画配图图片_插画配图素材_插画配图模板_【包图网】", "href": "https://ibaotu.com/chahua/"}, {"name": "VJshi片场_视频制作接单平台_企业影视宣传广告片拍摄剪辑外包", "href": "https://e.vjshi.com/"}, {"name": "3dicons - Open source 3D icon library", "href": "https://3dicons.co/"}, {"name": "新CG儿 - 数字视觉分享平台 | AE模板_视频素材_免费下载", "href": "https://www.newcger.com/"}, {"name": "千图网-免费设计图片素材网站-正版商用图库免费设计素材中国", "href": "https://www.58pic.com/"}, {"name": "西田样机 - 海量高质量Mockup模板|PSD样机|展示模型", "href": "https://mockup.sitapix.com/"}, {"name": "ドット絵ダウンロードサイト DOTOWN|無料の素材サイト", "href": "https://dotown.maeda-design-room.net/"}, {"name": "花瓣网 - 陪你做生活的设计师（创意灵感天堂，搜索、发现设计灵感、设计素材）", "href": "https://huaban.com/"}, {"name": "黑罐头: 一站式素材共享平台", "href": "https://www.heycan.com/home"}, {"name": "Sapiens Character Builder Library — Illustrations on UI8", "href": "https://ui8.net/ui8/products/sapiens-character-builder"}, {"name": "designstripe | Create &amp; customize beautiful illustrations", "href": "https://designstripe.com/"}, {"name": "逗比拯救世界--专业的表情包搜索网站", "href": "https://www.dbbqb.com/"}, {"name": "emoji表情大全,emoji百科,emoji含义,emoji表情包,emoji复制", "href": "https://www.emojidaquan.com/"}]}]}]}, {"name": "写作与排版", "emoji": "✏️", "description": "文案写作、公众号排版、Markdown", "groups": [{"name": "写作与排版", "icon": "✏️", "subgroups": [{"name": "写作与排版", "icon": "✏️", "children": [{"name": "金句谷_唯美的句子_伤感的句子_金句名言_句子迷", "href": "https://www.jinjugu.com/"}, {"name": "押韵精灵-在线押韵工具,支持单双三四押,大幅提高文案、诗词、金句、Rap创作效率的押韵神器", "href": "https://www.cnh5.net/"}, {"name": "爱微帮助手 - 新媒体人的好帮手", "href": "http://www.aiweibang.com/awb_s/editor"}, {"name": "TOPYS | 全球顶尖创意分享平台 OPEN YOUR MIND", "href": "https://www.topys.cn/"}, {"name": "新榜微信编辑器—让你的图文编辑生动有趣", "href": "https://edit.newrank.cn/"}, {"name": "秘塔写作猫", "href": "https://xiezuocat.com/#/?s=catbd3"}, {"name": "PPT-超级市场", "href": "http://ppt.sotary.com/web/wxapp/index.html"}, {"name": "句子迷 - 句子控", "href": "https://www.juzikong.com/tags/%E5%8F%A5%E5%AD%90%E8%BF%B7"}, {"name": "新榜——内容产业服务平台", "href": "https://www.newrank.cn/"}, {"name": "米范 – 酷导航", "href": "https://www.mifar.net/"}, {"name": "西瓜数据-公众号大数据服务商", "href": "http://data.xiguaji.com/Home#/DashBoard"}, {"name": "iLovePDF | 为PDF爱好者提供的PDF文件在线处理工具", "href": "https://www.ilovepdf.com/zh-cn"}, {"name": "活动汪 -一个专门为活动人服务的平台|海量活动策划方案,活动设计可供下载", "href": "https://www.eventwang.cn/"}, {"name": "梅花网-营销作品宝库", "href": "https://www.meihua.info/"}, {"name": "gif趣图 - 汇聚每日热门、搞笑、有趣gif动态图片 - soogif动图", "href": "https://www.soogif.com/shareSatin"}, {"name": "可能吧公众号排版器", "href": "https://knb.im/mp/"}, {"name": "Typora — a markdown editor, markdown reader.", "href": "https://typora.io/"}, {"name": "一分钟，了解石墨文档 ☁️", "href": "https://shimo.im/docs/WwCrPkxrQrhYyCV9"}, {"name": "Giiso写作机器人，一款内容创作AI辅助工具", "href": "https://www.giiso.com/#/"}, {"name": "抖几句 - 短视频剧本原创交易平台", "href": "https://www.doujiju.com/"}, {"name": "墨星写作网-提供写作手法，写作技巧，写作软件和小说写作素材，千万作者首选！ - powered by sdcms", "href": "http://www.mx-xze.net/"}, {"name": "素材巷 - 文案写作平台", "href": "http://www.sucaixiang.com/"}, {"name": "享梦游旅行主理人发旅游朋友圈的八种类型 - 知乎", "href": "https://zhuanlan.zhihu.com/p/645362063"}, {"name": "罗辑思维推荐书单（已全部整理好） - 知乎", "href": "https://zhuanlan.zhihu.com/p/587375426"}, {"name": "四种免费使用微软Azure进行文字转语音的方法！最自然接近人声的机器配音。 | 马小帮", "href": "https://www.maxiaobang.com/14236.html"}, {"name": "Convertio — 文件转换器", "href": "https://convertio.co/zh/"}, {"name": "HiPC - 你电脑的移动助手", "href": "https://hipc.cn/"}, {"name": "神秘的热心网友 - 收集免费实用有趣的东西，做最好的资源导航", "href": "https://imyshare.com/"}, {"name": "PPT模板_PPT模版免费下载_免费PPT模板下载 -【第一PPT】", "href": "https://www.1ppt.com/?imyshare.com=friends"}, {"name": "PPT模板免费下载_精美免费PPT模板下载 -【优品PPT】", "href": "https://www.ypppt.com/"}]}]}]}, {"name": "视频剪辑工具", "emoji": "🎬", "description": "视频编辑、素材、音频工具", "groups": [{"name": "视频剪辑工具", "icon": "🎬", "subgroups": [{"name": "视频剪辑工具", "icon": "🎬", "children": [{"name": "AnyVoice 克隆声音，可以使用，免费", "href": "https://anyvoice.net/zh"}, {"name": "海螺语音：让文字栩栩如“声”", "href": "https://hailuoai.com/audio?utm_source=ai-bot.cn"}, {"name": "Text To Speech - 在线文本转语音配音", "href": "https://www.text-to-speech.cn/"}, {"name": "声音克隆免费", "href": "https://fish.audio/zh-CN/"}, {"name": "悟空AI音效 - 免费生成下载高质量音效 | 共享社区 - AI 技术支持", "href": "https://wukong.ttson.cn/"}, {"name": "Face Swap AI：在线免费换脸，无需登录注册", "href": "https://faceswapai.org/zh"}, {"name": "AIFace Swap视频在线免费 - 无需注册 | Pollo AI", "href": "https://pollo.ai/zh/tool/face-swap-video"}, {"name": "在线免费AI换脸视频(无需注册)", "href": "https://supawork.ai/zh/ai-video-face-swap"}, {"name": "AI Face Swap Online - Swap Faces In Videos and Photos For Free", "href": "https://www.maxstudio.ai/face-swapper?type=video"}, {"name": "抖音热点宝 - 我的抖音热点", "href": "https://douhot.douyin.com/analysis?active_tab=analysis_core"}, {"name": "Noiz Studio", "href": "https://noiz.ai/login?redirect=/tts/creation"}, {"name": "克隆变声 a Hugging Face Space by Plachta", "href": "https://huggingface.co/spaces/Plachta/Seed-VC"}, {"name": "绘蛙官网-让你的商品第一时间被种草-简单好用的AI图文生成平台", "href": "https://www.ihuiwa.com/"}, {"name": "主页 | PixVerse，图生视频", "href": "https://app.pixverse.ai/home"}, {"name": "星流 - 新一代AI创作工具", "href": "https://www.xingliu.art/projects"}, {"name": "网页版图片无损放大，最大支持16倍，目前免费！图片放大！", "href": "https://www.aiyuzhou8.com/up"}, {"name": "DubbingX官网", "href": "https://dubbingx.com/"}, {"name": "男装搭配_关于男装搭配男士时尚新闻,资讯,文章_男装搭配图片-GQ男士网", "href": "https://www.gq.com.cn/tag/15664/"}, {"name": "服装配饰图_男士时尚配饰搭配技巧_流行鞋包配饰搭配-男士网", "href": "https://www.nanshiw.com/peishi/"}, {"name": "男生穿搭_男士秋冬穿衣搭配_穿搭图片_奥顺日常穿搭网", "href": "https://www.lmekj.cn/nansheng/"}, {"name": "Men&#39;s Fashion Tips And Style Guide For 2025 | FashionBeans", "href": "https://www.fashionbeans.com/"}, {"name": "Worn On TV | Where to buy clothes on TV Shows, soap operas, and talk shows.", "href": "https://wornontv.net/"}, {"name": "Street Peeper | Global Street Fashion and Street Style", "href": "http://streetpeeper.com/"}, {"name": "【必备】你的时尚资源是否顶级？用这13个网站就够了 - 知乎", "href": "https://zhuanlan.zhihu.com/p/74237366"}, {"name": "一键成图神器！20个国内主流AI绘画/文生图工具（建议收藏） - 知乎", "href": "https://zhuanlan.zhihu.com/p/28732232775"}, {"name": "VOGUE时尚网_潮流领袖,时尚宝典 | 国际权威时尚媒体《VOGUE服饰与美容》杂志官网", "href": "https://www.vogue.com.cn/"}, {"name": "腾讯混元AI视频", "href": "https://video.hunyuan.tencent.com/"}, {"name": "Free-TTS-免费在线TTS文本转语音", "href": "https://free-tts.cn/"}, {"name": "违禁词_极限词_敏感词_禁用词_新广告法文字违禁词查询检测工具-句无忧", "href": "https://www.check51.com/search/text.html"}, {"name": "文本检测_反垃圾_敏感词过滤_广告过滤_涉政检测_在线体验_网易易盾", "href": "https://dun.163.com/trial/text"}, {"name": "拍我AI - PixVerse国内正版，热门AI特效", "href": "https://pai.video/home"}]}]}]}, {"name": "格式转换工具", "emoji": "🔧", "description": "文件格式在线转换", "groups": [{"name": "格式转换工具", "icon": "🔧", "subgroups": [{"name": "格式转换工具", "icon": "🔧", "children": [{"name": "AI转PSD - 在线转换图像文件", "href": "https://www.aconvert.com/cn/image/ai-to-psd/"}]}]}]}, {"name": "PDF与文档处理", "emoji": "📄", "description": "PDF 编辑、转换与文档管理", "groups": [{"name": "PDF与文档处理", "icon": "📄", "subgroups": [{"name": "PDF与文档处理", "icon": "📄", "children": [{"name": "链客云", "href": "https://lk.linkduoo.com/main"}, {"name": "GIF压缩 - docsmall在线GIF压缩,GIF压缩工具,GIF缩放工具", "href": "https://docsmall.com/gif-compress"}, {"name": "佐糖 - 免费在线图片处理工具_在线抠图_证件照换底色_去水印_照片修复", "href": "https://picwish.cn/"}, {"name": "水印去除剂 - 删除照片中的任何水印", "href": "https://www.watermarkremover.io/zh"}, {"name": "下载 | Office Tool Plus", "href": "https://otp.landian.vip/zh-cn/download.html"}, {"name": "企业微信部署ChatGPT - Wangpc", "href": "https://www.wangpc.cc/software/wechat_com-chatgpt/"}, {"name": "2021年十大酒店管理系统（PMS）排行榜 - 知乎", "href": "https://zhuanlan.zhihu.com/p/368520959"}, {"name": "【财税知识】旅游业涉税 - 知乎", "href": "https://zhuanlan.zhihu.com/p/640378541?utm_id=0"}, {"name": "PDF24 Tools: 免费且易于使用的在线PDF工具", "href": "https://tools.pdf24.org/zh/"}, {"name": "下载您的文件 — Convertio", "href": "https://convertio.co/zh/download/c332a53f80bbc4548e6a477cd7127e4508bca6/"}, {"name": "MP4转WEBP, 在线转换器 - 转换视频, 音乐, 图像, PDF - Office-Converter.com", "href": "https://cn.office-converter.com/MP4-to-WEBP"}, {"name": "Promotion - UPDF", "href": "https://www.updf.cn/promotion/"}, {"name": "轻闪PDF 智能文档识别对话 - 上传PDF/Word/Excel/PPT/ePub文件并在线与文档聊天", "href": "https://lightpdf.cn/chatdoc"}, {"name": "图片转文字在线 - 图片文字提取 - 网页OCR文字识别 - 白描网页版扫描识别", "href": "https://web.baimiaoapp.com/"}, {"name": "佐糖一站式图片处理平台-智能抠图-消除笔-照片修复-编辑图片功能聚合页", "href": "https://picwish.cn/tools"}, {"name": "跨境购", "href": "https://lk.linkduoo.com/login"}, {"name": "GitHub - yiyuan-jichang/dizhi: 一元机场官网", "href": "https://github.com/yiyuan-jichang/dizhi"}]}]}]}, {"name": "桌面效率工具", "emoji": "🛠️", "description": "系统工具、远程控制、效率软件", "groups": [{"name": "桌面效率工具", "icon": "🛠️", "subgroups": [{"name": "桌面效率工具", "icon": "🛠️", "children": [{"name": "易撰自媒体工具_让内容创作更高效", "href": "https://www.yizhuan5.com/work.html#1-4?bd=8&bd_vid=10679356472751588482"}, {"name": "彩云小梦尝鲜版", "href": "http://if.caiyunai.com/dream/?dt_platform=douban_broadcast&dt_dapp=1#/"}, {"name": "微信排版-模板图片-在线设计制作-图怪兽", "href": "https://818ps.com/search/0-0-0-0-0-null-902_0_0_0-0-0-0-0.html?user_source=r245175&sdclkid=AL2s15fNArD6bLfpA5gR&bd_vid=10959792368260208664&route_id=16161370257936&route=3,&after_route=3"}, {"name": "牛片网-短视频交易服务平台-企业影视广告宣传片拍摄制作外包", "href": "https://www.6pian.cn/"}, {"name": "花火Hanabi-在线数据短视频工具-数可视", "href": "https://hanabi.data-viz.cn/index?lang=zh-CN"}, {"name": "稿定设计-做图做视频必备_在线设计神器_海量版权素材模板", "href": "https://www.gaoding.com/"}, {"name": "筑店魔方-专业SaaS服务提供商_免费商城系统_微信分销解决方案_小程序商城", "href": "http://www.zhudian.site/"}, {"name": "巨量创意", "href": "https://cc.oceanengine.com/creative-factory/jishi/0"}, {"name": "模板广场-来画动画-演示和动画视频创作创意平台", "href": "https://www.laihua.com/animation/templates"}, {"name": "媒小帮-自媒体多账号同步分发工具 助力高效运营", "href": "http://yixiaoer.coozf.com/?bd=3017&bd_vid=6896281775980163005"}, {"name": "酷呆桌面 - 桌面整理工具", "href": "https://coodesker.gitee.io/?utm_source=setting&utm_medium=main-client"}, {"name": "下载矢量图制作软件,svg编辑软件,下载万彩易绘大师 - 万彩易绘大师官网", "href": "http://www.animiz.cn/drawingmaster/download/"}, {"name": "蒲公英SD-WAN|智能组网|异地组网|4G工业路由器|移动办公|企业协同办公|远程视频监控-贝锐蒲公英官网", "href": "https://pgy.oray.com/"}, {"name": "ToDesk|免费安全流畅的远程控制软件", "href": "https://www.todesk.com/"}, {"name": "addog.vip | 广告人的网址导航 | 品牌/策划/营销/创意/文案", "href": "https://www.addog.vip/"}, {"name": "降噪 - Pix Fix", "href": "https://zh.pixfix.com/"}, {"name": "融媒宝官网_新媒体管家,自媒体平台多账号同步管理", "href": "https://www.rongmeibao.net/?channel=baidu2"}, {"name": "图牛助理官方网站，专业ps插件", "href": "https://www.ps6b.com/"}, {"name": "智影-在线智能视频创作平台", "href": "https://zenvideo.qq.com/home"}, {"name": "配音", "href": "https://shengka.ai.sogou.com/tts/detail/80962/"}, {"name": "做视频", "href": "https://www.laihua.com/dashboard/laiiva"}, {"name": "WantWords 反向词典", "href": "https://wantwords.net/"}, {"name": "酒店pms", "href": "https://my.ykpms.com/login.html"}, {"name": "极客编辑器|沉浸式知识写作", "href": "https://www.geekeditor.com/"}, {"name": "3d建模", "href": "https://graphorigin.com/home/index"}, {"name": "微信公众号markdown", "href": "https://lab.lyric.im/wxformat/"}, {"name": "首页 - 一起剪", "href": "https://saas.zaker.cn/cms/designVideo/dashboard/?from=yiqijian"}, {"name": "飞剪 - FlyingCut", "href": "https://www.flyingcut.com/edit/home/projectlist?source=baidu_search&medium=sem_1_1_116&campaign=sem_official"}, {"name": "AI智能写作,在线写作创作平台,AI写作更简单 - 写作猫®", "href": "https://www.xiezuomao.com/"}, {"name": "小发猫AI智能写作v1.2.3", "href": "https://www.xiaofamao.com/"}, {"name": "蚂蚁设计服务平台 - 犸良", "href": "https://design.alipay.com/emotion"}, {"name": "SVG操作黑科技排版", "href": "https://www.e2.cool/operations"}, {"name": "考拉新媒体导航——新媒体人的专属门户网站", "href": "https://www.kaolamedia.com/video"}, {"name": "自媒体导航 | 新媒体人的必备导航网站", "href": "https://www.zhouxingbin.com/"}, {"name": "这个不错网,发稿,发稿平台,软文推广,抖音推广,短视频推广,广告投放,软文营销,新闻稿发布,自助发稿平台,软文发稿平台,软文营销平台,软文发布平台,软文推广平台,媒体投放,新闻稿发布平台", "href": "http://www.zhegebucuo.com/"}, {"name": "万彩系列", "href": "https://www.animiz.cn/articletovideo/download/?navigation"}, {"name": "免费申请email邮箱-Email完美邮箱-专业定制邮箱www.email.cn", "href": "https://www.email.cn/"}, {"name": "犸良-阿里旗下的动效制作 | 集知盒子", "href": "https://www.jizhihezi.com/sites/1693.html/"}, {"name": "超级单页 - vipcom极简网页制作工具,简单好用的在线搭建企业轻官方网站平台", "href": "https://www.vipcom.cc/"}, {"name": "像素风头像", "href": "https://pixel-me.tokyo/en/"}, {"name": "黄二狗智能客服", "href": "https://ai2gou.com/"}, {"name": "可视化html编辑器", "href": "http://www.58html.com/"}, {"name": "PICKFREE - 免费资源导航|免版权图片|免费商用字体|免费音频、视频等设计素材下载", "href": "http://www.pickfree.cn/"}, {"name": "一帧秒创 - AI视频创作,图文转视频,智能视频图文创作平台", "href": "https://aigc.yizhentv.com/index.html"}, {"name": "八图片-www.8tupian.com", "href": "http://web.8tupian.com/8tp/index.php"}, {"name": "与熊论道/熊曰加密 - PcMoe!", "href": "http://hi.pcmoe.net/index.html"}, {"name": "自动剪辑神器", "href": "https://autocut.video/"}, {"name": "Jay的资源库 | 互联网资源集大成者", "href": "https://www.lovejay.top/"}, {"name": "图欧学习资源库", "href": "https://tuostudy.com/"}, {"name": "Jay仓库 | 互联网资源集大成者", "href": "https://www.likejay.cn/"}, {"name": "全网文章搜索采集 - 5118大数据", "href": "https://so.5118.com/"}, {"name": "「集简云官网」软件集成可以如此简单", "href": "https://www.jijyun.cn/?utm_source=baidu&utm_medium=cpc&utm_term=%E9%9B%86%E7%AE%80%E4%BA%91&utm_campagin=E01-%E5%93%81%E7%89%8C%E8%AF%8D-PC&utm_content=%E5%93%81%E7%89%8C%E8%AF%8D&e_matchtype=1&e_creative=58174637006&e_keywordid=391452913714&e_keywordid2=391452913714&bd_vid=10098399158944310123"}, {"name": "AIGC原创文案写作神器，营销内容-快文CopyDone，copyai.cn", "href": "https://copyai.cn/"}, {"name": "登录 | 轻流", "href": "https://accounts.qingflow.com/acc/passport/login"}, {"name": "MotionGo下载官网-免费在线PPT动画插件,原口袋动画,动画下载", "href": "http://motion.yoo-ai.com/"}, {"name": "腾讯智影-在线智能视频创作平台配音", "href": "https://zenvideo.qq.com/?sfrom=sogou"}, {"name": "闪剪工作台", "href": "https://shanjian.tv/"}, {"name": "快发卡自动发卡平台 - 最好用的自动发卡网站(kuaifaka.com)", "href": "https://www.kuaifaka.net/"}, {"name": "长尾关键词挖掘_站长工具_智能改写 - 5118营销大数据", "href": "https://www.5118.com/"}, {"name": "动画视频", "href": "https://www.videoscribe.co/en/"}, {"name": "腾讯智影-在线智能视频创作平台", "href": "https://zenvideo.qq.com/"}, {"name": "广告投放-传播易-投放广告网站✅", "href": "https://www.chuanboyi.com/"}, {"name": "搜索 | IT桔子", "href": "https://www.itjuzi.com/search?data=%E6%9D%A5%E6%9D%A5%E7%95%85%E6%B8%B8"}, {"name": "墨滴markdown工具", "href": "https://www.mdnice.com/"}, {"name": "堆友", "href": "https://d.design/?spm=ddesign.integral-task.0.0.3d06f786HK7ekk"}, {"name": "DCloud - HBuilder、HBuilderX、uni-app、uniapp、5+、5plus、mui、wap2app、流应用、HTML5、小程序开发、跨平台App、多端框架", "href": "https://www.dcloud.io/"}, {"name": "美图设计室-智能生成海报-一键生成-免费设计平面设计编辑软件-免费模板图文素材", "href": "https://www.x-design.com/"}, {"name": "工作学习 | AboutPPT导航", "href": "https://www.aboutppt.com/favorites/gongzuoxuexi"}, {"name": "登录 - Worktile", "href": "https://worktile.com/signin"}, {"name": "旅游工作 · Teambition okr", "href": "https://www.teambition.com/project/64e875f26e2986d85b4c755a/app/5eba5fc96a92214d420a321c"}, {"name": "www.vegaai.net 在线sd", "href": "https://www.vegaai.net/"}, {"name": "BD资源整合商务平台 - 找甲方-找渠道-异业合作-BD邦", "href": "https://www.bd.cn/"}, {"name": "AI工具集 | 700+ AI工具集合官网，国内外AI工具集导航大全", "href": "https://ai-bot.cn/#term-38"}, {"name": "伙伴云-云表格_Excel表格_表单制作工具_零代码协作平台", "href": "https://www.huoban.com/"}, {"name": "悦宇玩机-自助装机", "href": "https://heihei.run/softList.php"}, {"name": "AppStore中国iPhone总榜实时排名|App榜|iOS榜单-七麦数据", "href": "https://www.qimai.cn/rank"}, {"name": "下载中心 | AirDroid，投屏", "href": "https://www.airdroid.cn/download/"}, {"name": "连连控 - 高效专业的远程桌面控制解决方案｜连连控官网", "href": "https://www.asklink.com/"}, {"name": "钴 --- cobalt youtube下载", "href": "https://cobalt.tools/"}, {"name": "知鸿阁-副业兼职", "href": "https://zhihongge.com/page/2"}]}]}]}, {"name": "开发编程工具", "emoji": "💻", "description": "开发框架、代码托管、API", "groups": [{"name": "开发编程工具", "icon": "💻", "subgroups": [{"name": "开发编程工具", "icon": "💻", "children": [{"name": "电脑杀毒_垃圾清理_安全保护_电脑加速-微软电脑管家官网", "href": "https://cn.bing.com/guanjia/"}, {"name": "iGuge Helper", "href": "http://igghelper.com/"}, {"name": "Chrome插件,谷歌浏览器插件下载,chrome谷歌商店插件crx应用推荐与下载-扩展迷", "href": "https://www.extfans.com/"}, {"name": "Crx搜搜 - Chrome，Edge，Firefox，Opera浏览器扩展商店", "href": "https://crxsoso.com/"}, {"name": "购买 QuickLook - Microsoft Store zh-CN", "href": "https://www.microsoft.com/zh-cn/p/quicklook/9nv4bs3l1h4s?ocid=AID2200057_aff_7808_1245846__gcsza0tf6gkfqibe0ehe3tp6em2xudzu6xcatf0v00&tduid=(ir__gcsza0tf6gkfqibe0ehe3tp6em2xudzu6xcatf0v00)(7808)(1245846)(142684953)(280644)&irgwc=1&irclickid=_gcsza0tf6gkfqibe0ehe3tp6em2xudzu6xcatf0v00&rtc=1&activetab=pivot:overviewtab"}, {"name": "极简插件_Chrome扩展插件商店_优质crx应用", "href": "https://chrome.zzzmh.cn/#index"}, {"name": "BitDock比特工具栏-官方网站", "href": "http://bitdock.cn/"}, {"name": "首页 — 速鹰666", "href": "https://suying00.com/user"}, {"name": "一网一匠极速版 - 一起发现有趣的新产品", "href": "https://ywyj.cn/"}]}]}]}, {"name": "云存储共享", "emoji": "☁️", "description": "阿里云盘、文件传输、云存储", "groups": [{"name": "云存储共享", "icon": "☁️", "subgroups": [{"name": "云存储共享", "icon": "☁️", "children": [{"name": "UP云搜 - 最全阿里云盘资源搜索神器", "href": "https://upyunso.com/#pan666.cn"}, {"name": "我的小站-阿里云盘资源共享站", "href": "https://pan666.cn/"}, {"name": "我的小站-阿里云盘资源共享站", "href": "https://pan666.net/"}, {"name": "LocalSend", "href": "https://localsend.org/"}, {"name": "临时教育邮箱", "href": "https://etempmail.com/email?id=1"}, {"name": "AirPortal | 空投", "href": "https://airportal.cn/"}, {"name": "阿里云盘 - 公测进行中·阿里巴巴集团出品", "href": "https://www.aliyundrive.com/"}, {"name": "Snapdrop", "href": "https://snapdrop.net/"}, {"name": "轻松传 - 传文件，传文本，传屏幕，传实时视频", "href": "https://easychuan.cn/"}, {"name": "PairDrop | 局域网传输工具", "href": "https://g.xieniao.com/"}]}]}]}, {"name": "其他实用工具", "emoji": "🧰", "description": "各类在线实用小工具", "groups": [{"name": "其他实用工具", "icon": "🧰", "subgroups": [{"name": "其他实用工具", "icon": "🧰", "children": [{"name": "全国旅行社管理系统", "href": "https://econtract.12301.cn/travel/index?token=ISdpUOASC5KdC7nJ6CJA"}, {"name": "智游宝", "href": "https://boss.zhiyoubao.com/users/login.htm"}, {"name": "旅保网", "href": "http://lvyou.jiangtai.com/#/home"}, {"name": "全国旅行社管理系统", "href": "https://lxs.12301.cn/"}, {"name": "任我游-分销平台", "href": "http://cqrwykj.ziwoyou.net/home/index.jsp"}, {"name": "美团旅行境内度假商家中心", "href": "https://mpc.meituan.com/#/login"}, {"name": "淘宝网 - 淘！我喜欢", "href": "https://login.taobao.com/member/login.jhtml?sub=true&from=travel&style=default&redirect_url=https%3A%2F%2Fmai.taobao.com%2Fseller_admin.htm#/item/draft?_k=rfhmzn"}, {"name": "携程开放平台", "href": "https://u.ctrip.com/alliance/#/index"}, {"name": "旅行社管理系统 - 重庆迁徙旅行社", "href": "https://pifa.cloota.com/admin/"}, {"name": "地接业务管理系统 - 重庆迁徙旅行社", "href": "https://dijie.cloota.com/console/?token=MTgwNzEzMzM1OTMxMy81My8zNg=="}, {"name": "智游宝", "href": "http://boss.zhiyoubao.com/boss/login.htm"}, {"name": "保游网——国内更专业的旅游保险平台，旅游保险首选保游网官网！", "href": "http://www.51baoy.com/"}, {"name": "首页", "href": "https://piaovip.ctrip.com/"}, {"name": "链生活", "href": "http://www.zhuxiaoke.cn/"}, {"name": "美途管家旅行社ERP管理系统SAAS版", "href": "http://www.meitu.io/Account/Login"}, {"name": "刷单，排名宝", "href": "http://pmb.dbyang.top:8866/business.php/user/login"}, {"name": "资源中心-票付通旅游云平台", "href": "https://my.12301.cc/new/resourcecenter.html#/"}, {"name": "供应商平台", "href": "https://vbooking.ctrip.com/tour-bi-vendor-new/#/tour/vbkHome"}, {"name": "美团旅行境内度假商家中心", "href": "https://mpc.meituan.com/#/ticket/reporter/operations"}, {"name": "QUNAR门票管理后台", "href": "http://tts2.piao.qunar.com/home"}, {"name": "马蜂窝商家后台", "href": "https://b.mafengwo.cn/#/login"}, {"name": "运通系统", "href": "https://warehouse.tripsoho.com/#/login?redirect=%2F"}, {"name": "房掌柜 · 企业首页", "href": "http://www.jltour.com/user/home.do"}, {"name": "重庆长江黄金邮轮票务系统", "href": "http://tss5.cjhjyl.com/login.aspx"}, {"name": "旅通在线 - &quot;旅游+生活&quot;供应链平台", "href": "https://www.xlcen.com/"}, {"name": "以酒店预订为核心的自游行产品交易平台,订房易,香港酒店,澳门酒店,国内酒店,海外酒店,门票预订,自由行预订", "href": "http://www.dingfangyi.com/#/"}, {"name": "首页 - 道旅科技", "href": "https://www.didatravel.com/home"}, {"name": "云地接", "href": "https://www.yundijie.com/newop/login/index.html"}, {"name": "智我优选-订单管理", "href": "https://www.zowoyoo.com/newb2b/#/product-purchasing/orderList"}, {"name": "携程开放平台", "href": "https://u.ctrip.com/alliance/#/Index"}, {"name": "美团分销平台", "href": "https://mf.meituan.com/#/hotel/poi/list"}, {"name": "乐智同业资源交易平台", "href": "http://www.lezhichuyou.cn/#/"}, {"name": "票管家", "href": "https://www.youpiaola.com/#/login?redirect=%2F404"}, {"name": "订单来了", "href": "https://www.dingdandao.com/pmsManage/index?create=1"}, {"name": "同天下小强ERP-旅行社智能办公管理系统|旅游专线批发商系统|组团旅行社办公管理系统", "href": "http://www.tontisa.com/erp-index"}, {"name": "房掌柜 · 企业首页", "href": "https://www.jl-tour.com/user/home.do"}, {"name": "登录 - 开店宝美团酒景", "href": "https://ecom.meituan.com/bizaccount/login.html?loginByPhoneNumber=true&isProduction=true&epassportParams=%3Fbg_source%3D1%26service%3Dcom.sankuai.meishi.fe.ecom%26part_type%3D0%26feconfig%3Dbssoify%26biz_line%3D1%26continue%3Dhttps%253A%252F%252Fecom.meituan.com%252Fbizaccount%252Fbiz-choice.html%253Fredirect_uri%253Dhttps%25253A%25252F%25252Fecom.meituan.com%25252Fmeishi%25252F%2526_t%253D1694073723121%2526target%253Dhttps%25253A%25252F%25252Fecom.meituan.com%25252Fmeishi%25252F%26leftBottomLink%3D%26signUpTarget%3Dself"}, {"name": "首页旅景系统", "href": "https://bst.ctrip.com/"}, {"name": "酒店代理商一站式管理平台", "href": "https://www.vipdlt.com/dltstaticinfo/login.html"}, {"name": "甩房宝酒店业务平台", "href": "http://www.zcfgoagain.com/"}, {"name": "【旅行社】后台管理系统登录", "href": "http://a.zyx.tann.cc/dealer/login"}, {"name": "企业首页", "href": "http://c.fanjiaxing.com/?menuid=1"}, {"name": "百事通", "href": "https://www.lvtds.com/bestone/login"}, {"name": "美团分销联盟", "href": "https://pub.meituan.com/v2"}, {"name": "信天游 - 电子客票验真官网 航空公司官网机票价格总汇", "href": "https://www.travelsky.com.cn/"}, {"name": "飞象旅行-海外自由行旅游资源共享平台", "href": "http://www.b2btrip.cn/login;jsessionid=32C3B4D855A6DD41FB77379965EDC015"}, {"name": "登录", "href": "https://www.yundijie.com/#/login"}, {"name": "首页——重庆市政府采购云平台·服务超市", "href": "https://chinazhyc.zbj.com/"}, {"name": "登录", "href": "http://cqkc.yunlvkeji.cn/jsp/admin/login/login.jsp"}, {"name": "逸客旅行 - 新时代 新生活 新旅游", "href": "http://zyxzs.cc/"}, {"name": "铺得快-铺货平台", "href": "https://www.pudekuai.cn/#/index/homePage"}, {"name": "得有店 - 免费微商城_免费小程序制作_微信小程序开发 - 好生意 得有店！", "href": "https://www.deiyoudian.com/"}, {"name": "青森（Cyanmori）云加速vvvpppnnn", "href": "https://cccc.gg/"}, {"name": "八方云", "href": "https://bafangyun.vip/#/dashboard"}, {"name": "Air Free", "href": "https://airfree.app/user"}, {"name": "闪电⚡", "href": "http://vipshandian.com/"}, {"name": "仪表盘 | 六分机场", "href": "https://666666222.xyz/#/dashboard"}, {"name": "穿越火线机场", "href": "https://cfyun01.sbs/#/dashboard"}, {"name": "闪电⚡", "href": "https://0507.sd-auto-four.click/#/dashboard"}, {"name": "闪电地址发布页", "href": "https://sd.369.cyou/#"}, {"name": "一元机场", "href": "https://yiyuan1.com/#/dashboard"}, {"name": "GitHub - yiyuanjichang/dizhi: 一元机场官网", "href": "https://github.com/yiyuanjichang/dizhi"}, {"name": "注册 | 维云云", "href": "https://wyy.14kbuy.com/#/register"}]}]}]}, {"name": "综合资源导航", "emoji": "🗂️", "description": "AI 导航、资源库、工具集合", "groups": [{"name": "综合资源导航", "icon": "🗂️", "subgroups": [{"name": "综合资源导航", "icon": "🗂️", "children": [{"name": "扣子开发平台，零基础开启 Agent 专业开发", "href": "https://www.coze.cn/studio"}, {"name": "百炼控制台", "href": "https://bailian.console.aliyun.com/?tab=home#/home"}, {"name": "企业中心", "href": "https://www.webportal.top/portal.jsp"}, {"name": "登录系统", "href": "http://oa.jinkeservice.com/login.jsp"}, {"name": "超级分销商城系统 - 高效、专业的全渠道电商服务平台！", "href": "https://vip.cqanfei.com/account#/login"}, {"name": "商品管理", "href": "https://jinke.linxianxian.com/getway/baseConfig/goods/list"}, {"name": "金辰会", "href": "https://j.jkh.mobi/login2/"}, {"name": "西软云XMS", "href": "http://fox.jkh.mobi:8080/WebXMS/"}, {"name": "星球创战师 - 玩游戏，学编程", "href": "https://www.starcoders.net/"}, {"name": "关于星辰云丨星辰云官网做网站的", "href": "https://starxn.com/about.html"}, {"name": "火山方舟管理控制台", "href": "https://console.volcengine.com/ark/region:ark+cn-beijing/model/detail?Id=doubao-seed-1-6-vision"}, {"name": "新建标签页", "href": "edge://newtab/"}, {"name": "Google Chrome 网络浏览器", "href": "https://www.google.cn/chrome/"}, {"name": "证书查询-工业和信息化部教育与考试中心", "href": "https://www.miiteec.org.cn/certificate"}, {"name": "Lenovo Support", "href": "https://support.lenovo.com/"}, {"name": "Lenovo", "href": "https://www.lenovo.com/"}, {"name": "百度文心智能体", "href": "https://chat.baidu.com/aichat/square?appSquare=%257B%2522content%2522%253A%2522%25E6%25B5%25B7%25E9%2587%258F%25E6%2599%25BA%25E8%2583%25BD%25E4%25BD%2593%25E7%25AD%2589%25E4%25BD%25A0%25E6%259D%25A5%25E8%2581%258A%2522%252C%2522jump_discovery_page%2522%253A1%252C%2522logo%2522%253A%2522https%253A%252F%252Fpsstatic.cdn.bcebos.com%252Fbasics%252Fchat%252Fagentcenter_1722495731000.png%2522%252C%2522name%2522%253A%2522%25E5%258F%2591%25E7%258E%25B0%25E6%2599%25BA%25E8%2583%25BD%25E4%25BD%2593%2522%252C%2522pcSquareUrl%2522%253A%2522https%253A%252F%252Fchat.baidu.com%252Fagent%252Fdiscovery%252Fsquare%253FcallFrom%253Dpc%2526tabName%253D%2525E5%25258F%252591%2525E7%25258E%2525B0%2522%252C%2522pcUrl%2522%253A%2522https%253A%252F%252Fagents.baidu.com%252Fcenter%2522%252C%2522scheme%2522%253A%2522baiduboxapp%253A%252F%252Fv1%252Fbrowser%252Fopen%253Furl%253Dhttps%25253A%25252F%25252Fagents.baidu.com%25252Fcenter%25253Fsource%25253D3741000110000000%2526toolbarinfo%253D%25257B%252522toolinfos%252522%25253A%25255B%25257B%252522id%252522%25253A%2525221%252522%25257D%25252C%25257B%252522id%252522%25253A%2525223%252522%25257D%25252C%25257B%252522id%252522%25253A%2525224%252522%25257D%25252C%25257B%252522id%252522%25253A%2525225%252522%25257D%25255D%25257D%2526notShowLandingTopBar%253D2%2526isContainer%253D1%2526landingPageType%253Dbrowserlanding_center_aitab%2522%257D"}, {"name": "泼辣有图 | Polayoutu - Free Chinese stock photos", "href": "http://www.polayoutu.com/collections"}, {"name": "ExcelHome - 全球极具影响力的Excel门户,Office视频教程培训中心", "href": "http://www.excelhome.net/"}, {"name": "LR预设/PS预设/摄影影视后期调色预设下载 - 调色调网", "href": "http://www.tiaosediao.com/"}, {"name": "免费商用字体-猫啃网，免费商用中文字体下载！", "href": "https://www.maoken.com/freefonts"}, {"name": "Beautiful Free Images &amp; Pictures | Unsplash", "href": "https://unsplash.com/"}, {"name": "发现字体", "href": "https://www.hellofont.cn/font-list?tag=73"}, {"name": "Patterninja – pattern making application", "href": "https://patterninja.com/"}, {"name": "Free Stock Footage Videos, 4k After Effects Templates and More!", "href": "https://www.videezy.com/"}, {"name": "Let&#39;s Enhance – free online image upscale and enhancement. Try neural networks to increase resolution and quality now!", "href": "https://letsenhance.io/"}, {"name": "鹿班 - 让设计更美好", "href": "https://luban.aliyun.com/web/ai-lab/entry"}, {"name": "文心·一格 - AI艺术和创意辅助平台", "href": "https://yige.baidu.com/#/"}, {"name": "Pixilart - Free Online Art Community and Pixel Art Tool", "href": "https://www.pixilart.com/"}, {"name": "(*´∇｀*)吖~又好了~ Ai Chat公益版", "href": "https://www.cveoy.com/vip.html"}, {"name": "HeyFriday - 智能AI写作工具（星期五）", "href": "https://www.heyfriday.cn/home"}, {"name": "登录", "href": "https://copyai.cn/loginindex"}, {"name": "零克查词 — 专业的小红书、抖音、B站、小红书敏感词检测工具", "href": "http://ci.lingke.pro/"}, {"name": "梅林", "href": "https://merlin.foyer.work/"}, {"name": "New chat", "href": "https://chat.openai.com/chat"}, {"name": "VPN Gate: 公共 VPN 中继服务器列表", "href": "https://www.vpngate.net/cn/"}, {"name": "未来百科 - 最大的人工智能工具目录 |家", "href": "https://www.futurepedia.io/"}, {"name": "秘塔写作猫", "href": "https://xiezuocat.com/#/"}, {"name": "小冰", "href": "https://www.xiaoice.com/"}, {"name": "酷表ChatExcel", "href": "https://chatexcel.com/"}, {"name": "白鲸加速器 - 永远能连上的VPN", "href": "https://www.bjch123.com/?mid=3005"}, {"name": "Watt Toolkit - 瓦特工具箱(Steam++官网)", "href": "http://steampp.net/"}, {"name": "IT豪哥-电脑教程网", "href": "http://ithaoge.cn/"}, {"name": "玩机公社-专注于精品教程与资源分享~", "href": "https://www.wjsor.com/"}, {"name": "Discord | 玩耍聊天的地方", "href": "https://discord.com/"}, {"name": "AI 0x0", "href": "https://ai0x0.com/"}, {"name": "Welcome", "href": "https://loop.microsoft.com/p/eyJ3Ijp7InUiOiJodHRwczovL2hvbWUubWljcm9zb2Z0cGVyc29uYWxjb250ZW50LmNvbS8%2FbmF2PWN6MGxNa1ltWkQxaUlUZEdhV3htTlVKaFlVVlBUMWRqZW1welltUkNVRzlqZFdsVVptdHpObHBMZGxWUlVVdFhha3hqZGxGWk1XMHRVRlp4VDFGU2NsVmtiMVpQYTBaTFYya21aajB3TVVOUE4wNUxVMDlCV2pVM1VFbEhSalZUU2tWSlJsSkdRVVpWVlRaWVYwNUJKbU05Sm1ac2RXbGtQVEUlM0QiLCJyIjpmYWxzZX0sInAiOnsidSI6Imh0dHBzOi8vaG9tZS5taWNyb3NvZnRwZXJzb25hbGNvbnRlbnQuY29tL2NvbnRlbnRzdG9yYWdlL0NTUF83ZmE1NThlYy01YTkwLTQzNjgtOGU1OS1jY2UzYjFiNzQxM2UvRG9jdW1lbnQlMjBMaWJyYXJ5L0xvb3BBcHBEYXRhL1dlbGNvbWUuZmx1aWQ%2FZD13YTZlY2UwNTRhMGM1NDEzNDkxMTEwMjE3ZDU3YTk5NmYmY3NmPTEmd2ViPTEmbmF2PWN6MGxNa1pqYjI1MFpXNTBjM1J2Y21GblpTVXlSa05UVUY4M1ptRTFOVGhsWXkwMVlUa3dMVFF6TmpndE9HVTFPUzFqWTJVellqRmlOelF4TTJVbVpEMWlJVGRHYVd4bU5VSmhZVVZQVDFkamVtcHpZbVJDVUc5amRXbFVabXR6TmxwTGRsVlJVVXRYYWt4amRsRlpNVzB0VUZaeFQxRlNjbFZrYjFaUGEwWkxWMmttWmowd01VTlBOMDVMVTB0Vk5FUlhTMDVTVGtGSFVrRmFRMFZKUTBNM1MxaFdSMHhRSm1NOUpUSkdKbVpzZFdsa1BURW1ZVDFNYjI5d1FYQndKbkE5SlRRd1pteDFhV1I0SlRKR2JHOXZjQzF3WVdkbExXTnZiblJoYVc1bGNpWjRQU1UzUWlVeU1uY2xNaklsTTBFbE1qSlVNRkpVVlVoNGIySXlNV3hNYlRGd1dUTktkbU15T1cxa1NFSnNZMjVPZG1KdFJuTlpNamwxWkVkV2RXUkROV3BpTWpFNFdXbEZNMUp0YkhOYWFsWkRXVmRHUmxRd09WaFpNM0J4WXpKS2ExRnNRblpaTTFad1ZrZGFjbU42V21GVE0xcFdWVlpHVEZZeWNFMVpNMXBTVjFSR2RFeFdRbGRqVlRsU1ZXNUtWbHBIT1ZkVU1uUkhVekZrY0daRVFYaFJNRGd6Vkd0MFZGUXdSbUZPVkdSUlUxVmtSMDVXVGt0U1ZXeEhWV3RhUWxKc1ZsWk9iR2hZVkd0RkpUTkVKVEl5SlRKREpUSXlhU1V5TWlVelFTVXlNall5TTJNd1lqWTRMVGRtWVRrdE5EaG1OUzA0WmpVNUxUaGtNRGM0TTJZNE5qaG1ZeVV5TWlVM1JBJTNEJTNEIiwiciI6ZmFsc2V9LCJpIjp7ImkiOiI2MjNjMGI2OC03ZmE5LTQ4ZjUtOGY1OS04ZDA3ODNmODY4ZmMifX0%3D"}, {"name": "Chat2Doc - 您阅读文档的好帮手", "href": "https://chat2doc.cn/"}, {"name": "字符狂飙(WordFury)-文档生成应用", "href": "https://vgoapp.com/"}, {"name": "Create an Image - Playground AI", "href": "https://playgroundai.com/create"}, {"name": "旅程中提示工具", "href": "https://prompt.noonshot.com/"}, {"name": "阿里研究院", "href": "http://www.aliresearch.com/cn/index"}, {"name": "AICC", "href": "https://aicc.city/"}, {"name": "AIGC工具导航 | 发现全球优质AIGC工具，与创作者一同成长", "href": "https://aigc.cn/"}, {"name": "其它 AI 站点", "href": "https://tob-design.yuque.com/kxcufk/mj/hdmi0r93o2laghgm#6F2ON3QHGrBeQD4QXERougrqatT0xpHf"}, {"name": "ai画画", "href": "https://www.printidea.art/mine/membership"}, {"name": "D-ID | The #1 Choice for AI Generated Video Creation Platform", "href": "https://www.d-id.com/"}, {"name": "AI办公工具大全，提升你的办公效率 | AI工具集导航", "href": "https://ai-bot.cn/favorites/ai-office-tools/"}, {"name": "歌者AIppt", "href": "https://gezhe.caixuan.cc/"}, {"name": "站酷梦笔_人工智能加成的灵感和创作工具-站酷ZCOOL", "href": "https://www.zcool.com.cn/ailab"}, {"name": "阿里云智能logo设计", "href": "https://logo.aliyun.com/logo#/name"}, {"name": "来自 Microsoft 必应的图像创建者", "href": "https://cn.bing.com/create"}, {"name": "元分身-专业为您定制数智分身", "href": "https://www.yuan-avatar.com/main"}, {"name": "FUUN.FUN | 奇趣网站收藏家", "href": "https://fuun.fun/"}, {"name": "AI工具箱|AI工具导航|chatGPT|Midjourney|AI教程|AI集合|OpenAI", "href": "http://aitoolbox.cn/"}, {"name": "AutoDL-品质GPU租用平台-租GPU就上AutoDL", "href": "https://www.autodl.com/home"}, {"name": "网达极客社区", "href": "https://gitclone.com/"}, {"name": "GitHub 网站 - 小白工具箱", "href": "https://www.ooopn.com/tool/github/"}, {"name": "laf 云开发", "href": "https://laf.run/"}, {"name": "laf 云开发", "href": "https://laf.dev/"}, {"name": "炼丹阁", "href": "https://models.paomiantv.cn/models/"}, {"name": "ChatPPT_AI一键对话生成PPT_智能排版美化", "href": "https://chat-ppt.com/"}, {"name": "AI帮个忙 | 多功能AI小帮手", "href": "https://aibang.run/"}, {"name": "免费聊天", "href": "https://chat.bnu120.space/"}, {"name": "ChatGPT", "href": "https://gpts.wxredcover.cn/"}, {"name": "Anthropic | Claude, now in Slack", "href": "https://www.anthropic.com/index/claude-now-in-slack"}, {"name": "开展工作的平台 | Slack", "href": "https://slack.com/intl/zh-cn/"}, {"name": "「集简云官网」软件集成可以如此简单", "href": "https://www.jijyun.cn/"}, {"name": "Home Page - Wonder Dynamics", "href": "https://wonderdynamics.com/"}, {"name": "Vega AI 创作平台", "href": "https://rightbrain.art/"}, {"name": "工具达人 | 实用工具分享达人", "href": "https://toolsdar.com/"}, {"name": "Gamma做ppt", "href": "https://gamma.app/"}, {"name": "AgentGPT", "href": "https://agentgpt.reworkd.ai/"}, {"name": "Fabrie - 设计师的在线设计协作平台 | 融合表格的在线白板工作台", "href": "https://www.fabrie.cn/dashboard/project/647d3c3635111e3c43a06139"}, {"name": "HeyGen - AI Video Generator换声音数字人", "href": "https://www.heygen.com/"}, {"name": "Sign up - ElevenLabs换声音", "href": "https://elevenlabs.io/sign-up#google-sign-in"}, {"name": "MetaHuman | 逼真人类创建器 - 虚幻引擎 数字人- Unreal Engine", "href": "https://www.unrealengine.com/zh-CN/metahuman"}, {"name": "奇妙搜索", "href": "https://www.magicalsearch.top/main"}, {"name": "https://www.dalipan.com/#/main/search?restype=1", "href": "https://www.dalipan.com/#/main/search?restype=1"}, {"name": "Pebblely产品图片ai", "href": "https://app.pebblely.com/"}, {"name": "组件世界/WidgetStore - 丰富的嵌入式小组件库、动态图标库、可视化图表库", "href": "https://cn.widgetstore.net/#/home"}, {"name": "魔搭社区", "href": "https://www.modelscope.cn/home"}, {"name": "大饼AI变声", "href": "https://dubbing.tech/"}, {"name": "AIHub | AI导航 - 全球最新优质AI工具发现和学习平台", "href": "https://www.aihub.cn/"}, {"name": "Reecho睿声 - 超拟真语音合成与瞬时克隆平台", "href": "https://www.reecho.cn/"}, {"name": "Kimi.ai - 帮你看更大的世界", "href": "https://kimi.moonshot.cn/?utm_campaign=TR_6ib4bOmo&utm_content=&utm_medium=B%E7%AB%99&utm_source=CH_Pa7cikq0&utm_term="}, {"name": "吐司 TusiArt.com | 可在线生图的 AI 模型分享社区，还是免费的！", "href": "https://tusiart.com/"}, {"name": "飞影数字人", "href": "https://hifly.cc/login"}, {"name": "AIGC助手", "href": "https://www.160.com/aigc/index.html"}, {"name": "免费AI工具箱 - 一切开始的地方，告别信息差。", "href": "https://nav.laogou717.com/"}, {"name": "首页 - 通义听悟", "href": "https://tingwu.aliyun.com/home"}, {"name": "Motiff 妙多官网 - AI 驱动的用户界面设计工具", "href": "https://www.motiff.cn/?ref=nav.liesys.com"}, {"name": "Halo - 强大易用的开源建站工具", "href": "https://www.halo.run/"}, {"name": "1Panel - 现代化、开源的 Linux 服务器运维管理面板", "href": "https://1panel.cn/"}, {"name": "AlStarter-您的AI项目管理平台 – AlStarter启动器", "href": "https://www.starter.top/"}, {"name": "首页 - HelloGitHub", "href": "https://hellogithub.com/"}, {"name": "MiniMax 语音：让文字栩栩如“声” 文转语音，配音", "href": "https://www.minimaxi.com/audio"}, {"name": "未来智库 - 官方网站", "href": "https://www.vzkoo.com/"}]}]}]}, {"name": "营销数据分析", "emoji": "📊", "description": "新媒体数据、营销分析、SEO", "groups": [{"name": "营销数据分析", "icon": "📊", "subgroups": [{"name": "营销数据分析", "icon": "📊", "children": [{"name": "效果广告运营平台", "href": "https://xg.zhihu.com/registered"}, {"name": "案例 - 电商资讯 - 做生意, 找有赞", "href": "https://www.youzan.com/cms?type=11"}, {"name": "千瓜数据-热门笔记搜索", "href": "http://app.qian-gua.com/#/material/note"}, {"name": "笔记榜单-灰豚数据", "href": "https://xhs.huitun.com/#/note/note_list"}, {"name": "低粉爆款排行 - 新红", "href": "https://xh.newrank.cn/content/notesRank/hot"}, {"name": "2023数据报告攻略下载,数据报告攻略,自助游攻略 - 马蜂窝", "href": "https://www.mafengwo.cn/gonglve/zt-1051-1-0-0.html#list"}, {"name": "topklout克劳锐行业数据", "href": "https://www.topklout.com/#/home"}]}]}]}, {"name": "旅行地图工具", "emoji": "🗺️", "description": "地图制作、旅行规划", "groups": [{"name": "旅行地图工具", "icon": "🗺️", "subgroups": [{"name": "旅行地图工具", "icon": "🗺️", "children": [{"name": "小蚁路书", "href": "https://xylushu.com/home"}, {"name": "地图小程序", "href": "https://wia.amap.com/#/manage/maps"}, {"name": "exping - 在地图上呈现无限可能", "href": "https://exping.world/"}, {"name": "易制地图-架空世界地图、小说地图、游戏地图制作工具。", "href": "https://www.makeamap.cn/"}, {"name": "易制地图-架空世界地图、小说地图、游戏地图制作工具。", "href": "https://www.makeamap.cn/index.html"}, {"name": "大陆版谷歌地球 看谷歌地球历史影像 最新影像 免加速", "href": "http://wang.giiiis.com/"}, {"name": "远山路书 - 免费路书制作工具 - 户外爱好者分享、交流", "href": "https://yslushu.com/"}]}]}]}, {"name": "生活娱乐", "emoji": "🎉", "description": "影视、音乐、兴趣内容", "groups": [{"name": "生活娱乐", "icon": "🎉", "subgroups": [{"name": "生活娱乐", "icon": "🎉", "children": [{"name": "茶杯狐 Cupfox", "href": "https://www.cupfox.com/"}, {"name": "单机游戏下载_单机游戏大全中文版_好玩的单机游戏下载基地_当游网", "href": "http://www.3h3.com/"}, {"name": "在 PC 上免费下载 torrent 游戏 | ByRutor", "href": "https://repack-byrutor.org/"}, {"name": "3D", "href": "https://www.qijishow.com/down/efficiency.html"}, {"name": "帝国时代4正式版下载-帝国时代4中文版下载 免安装绿色版-当快软件园", "href": "https://www.downkuai.com/soft/147293.html"}, {"name": "Categories", "href": "https://onehu.xyz/categories"}, {"name": "知乎搬运工_知乎小说盐选文章免费阅读", "href": "https://www.sxctp.org/"}, {"name": "写轮指钢琴即兴个人制谱园地_中国曲谱网", "href": "http://www.qupu123.com/space/347883"}, {"name": "Z-Library – the world’s largest e-book library. Your gateway to knowledge and culture.", "href": "https://zlibrary-east.se/?signAll=1&ts=0555"}, {"name": "聚合网盘资源搜索_搜库:pan.soku.one", "href": "https://pan.soku.one/"}, {"name": "tvbox源配置", "href": "https://tvboxconf.clbug.com/"}, {"name": "Z-Library – 世界上最大的电子图书馆。自由访问知识和文化。", "href": "https://zh.singlelogin.re/"}, {"name": "奈飞工厂：免费提供Netflix影剧动漫的流媒体平台", "href": "https://www.netflixgc.com/"}, {"name": "今日热榜官网", "href": "https://tophub.today/"}]}]}]}, {"name": "游戏资源", "emoji": "🎮", "description": "游戏下载、攻略、社区", "groups": [{"name": "游戏资源", "icon": "🎮", "subgroups": [{"name": "游戏资源", "icon": "🎮", "children": [{"name": "SWITCH520-SWITCH游戏下载-SWITCH金手指", "href": "http://switch520.com/"}, {"name": "Savegame Editor – The legend of Zelda: Breath of the wild", "href": "https://www.marcrobledo.com/savegame-editors/zelda-botw/"}, {"name": "Cкачать игры на ПК [последние версии 2022] через торрент бесплатно", "href": "https://byrut.org/"}, {"name": "白嫖者联盟", "href": "https://fourpetal.com/"}, {"name": "Switch520", "href": "https://laoquzhang.com/"}, {"name": "Switch520", "href": "https://xxxxx520.com/"}, {"name": "阿里云盘 最强1006部作品合集[持续更新]|狗哥出品-品质保障|-Switch520", "href": "https://xxxxx528.com/58328.html"}, {"name": "永久防迷路", "href": "https://sway.cloud.microsoft/1ESaLEE3x47BTgZC"}, {"name": "flysheep资源避难所-一个免费的二次元风格下载站", "href": "https://www.flysheep6.com/"}, {"name": "玩游戏来机地_3A大作_单机游戏_PC单机游戏下载_免费电脑单机游戏_存档", "href": "https://www.jidiyouxi.com/?f=zh304"}]}]}]}, {"name": "量化投资", "emoji": "📈", "description": "量化交易、投资分析", "groups": [{"name": "量化投资", "icon": "📈", "subgroups": [{"name": "量化投资", "icon": "📈", "children": [{"name": "我的主页 - 果仁网", "href": "https://guorn.com/user/home?page=talkall&pre=signup"}, {"name": "我的策略 - JoinQuant", "href": "https://www.joinquant.com/algorithm/index/list"}]}]}]}];
 </script>
 <script>
 (function() {
-  var LETTER_COLORS = ['#0071e3','#ac39ff','#ff2d55','#34c759','#ff9500','#ff9f0a','#5e5ce6','#0088cc'];
+  var LETTER_COLORS = '#0071e3,#ac39ff,#ff2d55,#34c759,#ff9500,#ff9f0a,#5e5ce6,#0088cc,#e83e8c,#20c997'.split(',');
 
   var flatItems = [], categories = [];
-  function catTotal(c) { var s=0; for(var gi=0;gi<(c.groups||[]).length;gi++) { for(var si=0;si<c.groups[gi].subgroups.length;si++) s+=c.groups[gi].subgroups[si].children.length; } return s; }
+  function catTotal(c) { var s=0; for(var gi=0;gi<(c.groups||[]).length;gi++) for(var si=0;si<c.groups[gi].subgroups.length;si++) s+=c.groups[gi].subgroups[si].children.length; return s; }
   for (var i = 0; i < BOOKMARK_DATA.length; i++) {
     var c = BOOKMARK_DATA[i]; categories.push(c);
     for (var gi = 0; gi < (c.groups||[]).length; gi++) {
@@ -292,32 +244,30 @@ var BOOKMARK_DATA = [{"name": "AI绘画生成", "emoji": "🎨", "description": 
 
   function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/'/g,'&#39;'); }
   function dm(u) { try { return new URL(u).hostname.replace(/^www\./, ''); } catch(e) { return u; } }
-  function fc(s) { var m=s.trim().match(/[一-鿿]/);if(m)return m[0];m=s.trim().match(/[a-zA-Z]/);if(m)return m[0].toUpperCase();return s.trim().charAt(0).toUpperCase(); }
+  function fc(s) { var m=s.trim().match(/[^\d\s]/); return m ? m[0].toUpperCase() : '?'; }
 
-    function cardHTML(it) {
-    var d = dm(it.href), desc = it.desc || '', l = fc(it.name);
+  function cardHTML(it) {
+    var d = dm(it.href), l = fc(it.name);
     var lc = LETTER_COLORS[(it.name.charCodeAt(0)||0) % LETTER_COLORS.length];
-    var host = ''; try { host = new URL(it.href).hostname; } catch(e) {}
-
-    return '<div class="tool" data-host="' + esc(host) + '" data-letter="' + esc(l) + '" data-color="' + lc + '"><a class="tool-head" href="' + esc(it.href) + '" target="_blank" rel="noopener">'
-      + '<div class="tool-img" style="background:linear-gradient(135deg,' + lc + '66,' + lc + '22)">'
-      + '<span class="tool-letter" style="color:' + lc + '">' + esc(l) + '</span>'
-      + '</div>'
-      + '<div class="tool-title">' + esc(it.name) + '</div>'
-      + '</a>'
-      + '<div class="tool-body">' + (desc || d) + '</div>'
-      + '</div>';
+    return '<div class="tool" data-host="'+esc(d)+'"><a class="tool-head" href="'+esc(it.href)+'" target="_blank" rel="noopener">'
+      +'<div class="tool-img" style="background:'+lc+'0d">'
+      +'<span class="tl" style="color:'+lc+'">'+esc(l)+'</span>'
+      +'</div>'
+      +'<div class="tool-title">'+esc(it.name)+'</div>'
+      +'</a>'
+      +'<div class="tool-body">'+esc(d)+'</div>'
+      +'</div>';
   }
-  // ─── Tabs ───
-  var catBarInner = document.getElementById('catBarInner');
+
+  var catBar = document.getElementById('catBar');
   function renderTabs() {
     var h = '<span class="cat-tab' + (activeCategory===null?' active':'') + '" data-cat="">全部</span>';
     for (var i=0;i<categories.length;i++) {
       var c=categories[i];
-      h += '<span class="cat-tab' + (activeCategory===c.name?' active':'') + '" data-cat="' + esc(c.name) + '">' + (c.emoji||'') + ' ' + esc(c.name) + '</span>';
+      h += '<span class="cat-tab' + (activeCategory===c.name?' active':'') + '" data-cat="' + esc(c.name) + '">' + esc(c.name) + '</span>';
     }
-    catBarInner.innerHTML = h;
-    catBarInner.querySelectorAll('.cat-tab').forEach(function(el){el.addEventListener('click',function(){selectCategory(this.dataset.cat||null);});});
+    catBar.innerHTML = h;
+    catBar.querySelectorAll('.cat-tab').forEach(function(el){el.addEventListener('click',function(){selectCategory(this.dataset.cat||null);});});
   }
   function selectCategory(name) {
     activeCategory = name; renderTabs();
@@ -326,19 +276,17 @@ var BOOKMARK_DATA = [{"name": "AI绘画生成", "emoji": "🎨", "description": 
     else window.scrollTo({top:0,behavior:'smooth'});
   }
 
-  // ─── Sidebar ───
   var sideList = document.getElementById('sideList');
   function buildSide() {
     if (activeCategory) { sideList.innerHTML = ''; return; }
     var h = '';
     for (var i=0;i<categories.length;i++) {
       var c=categories[i];
-      h += '<li><a class="sidebox" href="#cat-' + esc(c.name) + '"><span class="s-icon">' + (c.emoji||'') + '</span><span class="s-label">' + esc(c.name) + '</span></a></li>';
+      h += '<a href="#cat-'+esc(c.name)+'"><span class="s-icon">'+(c.emoji||'')+'</span><span class="s-label">'+esc(c.name)+'</span></a>';
     }
     sideList.innerHTML = h;
   }
 
-  // ─── Content ───
   var mainContent = document.getElementById('mainContent');
 
   function renderContent() {
@@ -352,112 +300,59 @@ var BOOKMARK_DATA = [{"name": "AI绘画生成", "emoji": "🎨", "description": 
         if ((fi.it.name+' '+(fi.it.desc||'')+' '+fi.it.href+' '+fi.cat).toLowerCase().indexOf(q)!==-1) rs.push(fi);
       }
       count = rs.length;
-      h += '<div class="search-head"><h2><span class="q">"' + esc(q) + '"</span></h2><p>' + count + ' 个结果</p></div>';
+      h += '<div class="search-hd"><h2><span class="q">"'+esc(q)+'"</span></h2><p>'+count+' 个结果</p></div>';
       if (count>0) { h += '<div class="bookmark-grid">'; for (var r=0;r<rs.length;r++) h += cardHTML(rs[r].it); h += '</div>'; }
     } else if (activeCategory) {
       var cat=null;
       for (var cc=0;cc<categories.length;cc++){if(categories[cc].name===activeCategory){cat=categories[cc];break;}}
       if (cat) { count=catTotal(cat); h += buildSection(cat, true); }
     } else {
-      h += '<div class="hero"><h1>贝塔<em>导航</em></h1><p class="sub">' + flatItems.length + ' 个精选网站，' + categories.length + ' 个主题分类</p>';
-      h += '<div class="hero-stats"><div class="hero-stat"><div class="n">' + flatItems.length + '</div><div class="l">精选书签</div></div><div class="hero-stat"><div class="n">' + categories.length + '</div><div class="l">分类主题</div></div><div class="hero-stat"><div class="n">2026</div><div class="l">持续维护</div></div></div>';
-      h += '</div>';
-
-      // AI Column
+      h += '<div class="hero"><h1>贝塔<em>导航</em></h1><p class="sub">'+flatItems.length+' 个精选网站</p>';
+      h += '<div class="hero-stats"><div class="hero-stat"><div class="n">'+flatItems.length+'</div><div class="l">网站</div></div><div class="hero-stat"><div class="n">'+categories.length+'</div><div class="l">分类</div></div><div class="hero-stat"><div class="n">'+new Date().getFullYear()+'</div><div class="l">持续更新</div></div></div></div>';
       h += aiColumnHTML();
       count = flatItems.length;
       for (var d=0;d<categories.length;d++) { h += buildSection(categories[d], false); }
     }
 
     if (typeof buildSide === 'function') { if (!q && !activeCategory) buildSide(); else sideList.innerHTML = ''; }
-
-    if (count===0 && q) { mainContent.innerHTML = '<div class="empty-state"><div class="ei">🔍</div><p>没有找到</p></div>'; return; }
+    if (count===0 && q) { mainContent.innerHTML = '<div class="empty"><div class="ei">🔍</div></div>'; return; }
     mainContent.innerHTML = h;
-
-    // Parallel favicon loading: try all sources, use first that works
-    var FAV_SOURCES = [
-      function(h) { return 'https://' + h + '/favicon.ico'; },
-      function(h) { return 'https://api.iowen.cn/favicon/' + h + '.png'; },
-      function(h) { return 'https://www.google.com/s2/favicons?domain=' + h + '&sz=64'; },
-      function(h) { return 'https://icons.duckduckgo.com/ip3/' + h + '.ico'; },
-    ];
-    document.querySelectorAll('.tool[data-host]').forEach(function(tool) {
-      var host = tool.dataset.host;
-      var letter = tool.dataset.letter;
-      var color = tool.dataset.color;
-      if (!host) return;
-      var loaded = false;
-      var attempts = 0;
-      FAV_SOURCES.forEach(function(srcFn) {
-        var img = new Image();
-        img.onload = function() {
-          if (!loaded) {
-            loaded = true;
-            var fb = tool.querySelector('.tool-letter');
-            if (fb) {
-              fb.textContent = '';
-              fb.style.background = 'rgba(255,255,255,0.9)';
-              fb.style.borderRadius = '6px';
-              fb.style.padding = '4px';
-              fb.innerHTML = '<img src="' + this.src + '" style="width:52px;height:52px;object-fit:contain;display:block">';
-            }
-          }
-        };
-        img.onerror = function() {
-          attempts++;
-        };
-        img.src = srcFn(host);
-      });
-    });
   }
 
-  // ─── AI Column ───
   var AI = [
-    {i:'🐬',t:'DeepSeek & 模型入门',g:[
-      {n:'Ollama',h:'https://ollama.com/'},{n:'DeepSeek 使用',h:'https://chat.deepseek.com/'},{n:'DeepSeek 平台',h:'https://platform.deepseek.com/'},{n:'入门技巧',h:'https://www.waytoagi.com/'},{n:'AI 导航',h:'https://ai-bot.cn/'},{n:'本地部署',h:'https://ollama.com/blog'}
-    ]},{i:'💻',t:'AI 编程 & API',g:[
-      {n:'AI 编程',h:'https://www.trae.ai/'},{n:'API 文档',h:'https://platform.openai.com/docs/'},{n:'TRAE',h:'https://www.trae.ai/'},{n:'n8n',h:'https://n8n.io/'}
-    ]},{i:'🦾',t:'AI Agent & 自动化',g:[
-      {n:'Agent 平台',h:'https://www.coze.cn/'},{n:'MCP 教程',h:'https://modelcontextprotocol.io/'},{n:'OWL',h:'https://github.com/camel-ai/owl'},{n:'OpenManus',h:'https://github.com/mannaandpoem/OpenManus'},{n:'Agent Skills',h:'https://www.waytoagi.com/'}
-    ]},{i:'🤵',t:'Claude Code',g:[
-      {n:'官方文档',h:'https://docs.anthropic.com/en/docs/claude-code'},{n:'GitHub',h:'https://github.com/anthropics/claude-code'}
-    ]},{i:'🎨',t:'AI 图像 & 视频',g:[
-      {n:'AI 生图',h:'https://www.liblib.art/'},{n:'Seedream',h:'https://seeddream.io/'},{n:'Flux',h:'https://www.liblib.art/'},{n:'AIGC 视频',h:'https://www.bilibili.com/'}
-    ]},{i:'📊',t:'提示词 & 测评',g:[
-      {n:'提示词库',h:'https://www.aishort.top/'},{n:'模型横评',h:'https://lmarena.ai/'},{n:'Gemini',h:'https://aistudio.google.com/'},{n:'工具盘点',h:'https://ai-bot.cn/'}
-    ]}
+    {i:'🐬',t:'DeepSeek & 模型入门',g:[{n:'Ollama',h:'https://ollama.com/'},{n:'DeepSeek',h:'https://chat.deepseek.com/'},{n:'DeepSeek 平台',h:'https://platform.deepseek.com/'},{n:'入门指南',h:'https://www.waytoagi.com/'},{n:'AI 导航',h:'https://ai-bot.cn/'}]},
+    {i:'💻',t:'AI 编程 & API',g:[{n:'Trae',h:'https://www.trae.ai/'},{n:'API 文档',h:'https://platform.openai.com/docs/'},{n:'n8n',h:'https://n8n.io/'}]},
+    {i:'🦾',t:'AI Agent',g:[{n:'Coze',h:'https://www.coze.cn/'},{n:'MCP',h:'https://modelcontextprotocol.io/'},{n:'OWL',h:'https://github.com/camel-ai/owl'},{n:'Skills',h:'https://www.waytoagi.com/'}]},
+    {i:'🎨',t:'AI 图像 & 视频',g:[{n:'Liblib',h:'https://www.liblib.art/'},{n:'Seedream',h:'https://seeddream.io/'},{n:'AIGC',h:'https://www.bilibili.com/'}]},
+    {i:'📊',t:'提示词 & 测评',g:[{n:'提示词库',h:'https://www.aishort.top/'},{n:'模型横评',h:'https://lmarena.ai/'},{n:'工具盘点',h:'https://ai-bot.cn/'}]},
   ];
   function aiColumnHTML() {
-    var h = '<div class="ai-col"><div class="ai-col-head"><span class="emoji">📡</span><h3>AI 探索专栏</h3></div><div class="ai-grid">';
+    var h = '<div class="ai-col"><div class="ai-col-hd"><h2>AI 探索</h2></div><div class="ai-grid">';
     for (var a=0;a<AI.length;a++) {
       var cd=AI[a];
-      h += '<div class="ai-card"><div class="ai-card-head"><span class="ai-card-icon">' + cd.i + '</span><h4>' + esc(cd.t) + '</h4></div><div class="ai-tags">';
-      for (var j=0;j<cd.g.length;j++) h += '<a class="ai-tag" href="' + esc(cd.g[j].h) + '" target="_blank" rel="noopener">' + esc(cd.g[j].n) + '</a>';
+      h += '<div class="ai-card"><div class="ai-card-hd"><span>'+cd.i+'</span><h4>'+esc(cd.t)+'</h4></div><div class="ai-tags">';
+      for (var j=0;j<cd.g.length;j++) h += '<a class="ai-tag" href="'+esc(cd.g[j].h)+'" target="_blank" rel="noopener">'+esc(cd.g[j].n)+'</a>';
       h += '</div></div>';
     }
     return h + '</div></div>';
   }
 
-  // ─── Section ───
   function buildSection(cat, showAll) {
-    var h = '<div class="cat-section" id="cat-' + esc(cat.name) + '">';
-    h += '<div class="sec-title"><span class="emoji">' + (cat.emoji||'') + '</span><h3>' + esc(cat.name) + '</h3><span class="desc">' + esc(cat.description||'') + '</span></div>';
+    var h = '<div class="cat-sect" id="cat-'+esc(cat.name)+'">';
+    h += '<div class="sec-hd"><h2>'+(cat.emoji||'')+' '+esc(cat.name)+'</h2><span>'+catTotal(cat)+'</span></div>';
     h += '<div class="bookmark-grid">';
     for (var gi=0;gi<cat.groups.length;gi++) {
       var g=cat.groups[gi];
       for (var si=0;si<g.subgroups.length;si++) {
         var sg=g.subgroups[si];
-        var showN = showAll ? sg.children.length : Math.min(sg.children.length, 18);
-        for (var sj=0;sj<showN;sj++) {
-          h += cardHTML(sg.children[sj]);
-        }
+        var showN = showAll ? sg.children.length : Math.min(sg.children.length, 24);
+        for (var sj=0;sj<showN;sj++) { h += cardHTML(sg.children[sj]); }
       }
     }
     h += '</div></div>';
     return h;
   }
 
-  // ─── Search ───
   document.getElementById('searchInput').addEventListener('input', function() {
     if (this.value.trim()) { activeCategory=null; renderTabs(); }
     renderContent();
